@@ -48,6 +48,12 @@ jobs:
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git config --global --add safe.directory "$GITHUB_WORKSPACE/musily_installer"
 
+      - name: Sync submodules
+        run: |
+          git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
+          git submodule sync --recursive
+          git submodule update --init --recursive
+
       - name: Verify musily_installer submodule
         if: matrix.os == 'ubuntu-22.04'
         run: |
