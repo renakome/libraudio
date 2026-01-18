@@ -83,6 +83,13 @@ jobs:
           echo "${{ secrets.KEY_STORE_BASE64 }}" | base64 --decode > android/app/key.jks
           flutter build apk --release --flavor stable
 
+      - name: Rename Android APK
+        if: matrix.os == 'ubuntu-22.04'
+        run: |
+          APK_PATH=$(find build/app/outputs/flutter-apk -name "*.apk" | head -n 1)
+          DEST="build/libraudio-${{ needs.metadata.outputs.version }}.apk"
+          mv "$APK_PATH" "$DEST"
+
       - name: Build Linux
         if: matrix.os == 'ubuntu-22.04'
         run: flutter build linux --release
@@ -90,7 +97,7 @@ jobs:
       - name: Archive Linux build
         if: matrix.os == 'ubuntu-22.04'
         run: |
-          tar -czvf build/musily-linux-x64.tar.gz -C $BUILD_DIR_LINUX .
+          tar -czvf build/libraudio-linux-x64.tar.gz -C $BUILD_DIR_LINUX .
 
       - name: Clean musily_installer/assets/app
         if: matrix.os == 'ubuntu-22.04'
@@ -125,7 +132,7 @@ jobs:
           rm -rf musily_installer/assets/app/*
           cp LICENSE musily_installer/assets/app
           echo ${{ needs.metadata.outputs.version }} > musily_installer/assets/app/version.txt
-          tar -czvf musily_installer/assets/app/musily.tar.gz -C build/linux/x64/release/bundle .
+          tar -czvf musily_installer/assets/app/libraudio.tar.gz -C build/linux/x64/release/bundle .
 
       - name: Rebuild musily_installer (Installer mode)
         if: matrix.os == 'ubuntu-22.04'
@@ -147,9 +154,9 @@ jobs:
 
           # Create a zip with the executable .run file
           mkdir -p build/zip
-          cp musily_installer/output/musily_installer.run build/zip/musily-installer-${{ needs.metadata.outputs.version }}.run
+          cp musily_installer/output/musily_installer.run build/zip/libraudio-installer-${{ needs.metadata.outputs.version }}.run
           cd build/zip
-          zip -r ../musily-linux-installer-${{ needs.metadata.outputs.version }}.zip *.run
+          zip -r ../libraudio-linux-installer-${{ needs.metadata.outputs.version }}.zip *.run
           cd ../..
 
           # Clean up temp directory
@@ -182,7 +189,7 @@ jobs:
       - name: Move installer to build folder
         if: matrix.os == 'windows-latest'
         run: |
-          mv Output/musily-installer.exe build/musily-windows-installer.exe
+          mv Output/musily-installer.exe build/libraudio-windows-installer.exe
 
       - name: Build macOS
         if: matrix.os == 'macos-latest'
@@ -191,7 +198,9 @@ jobs:
       - name: Archive macOS build
         if: matrix.os == 'macos-latest'
         run: |
-          ditto -c -k --sequesterRsrc --keepParent build/macos/Build/Products/Release/musily.app build/musily-macos-x64.zip
+          APP_PATH=$(ls build/macos/Build/Products/Release/*.app | head -n 1)
+          echo "Archiving $APP_PATH"
+          ditto -c -k --sequesterRsrc --keepParent "$APP_PATH" build/libraudio-macos-x64.zip
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
@@ -228,9 +237,11 @@ jobs:
 
       - name: Rename APK file
         run: |
-          apk_path=$(find dist -name "*.apk" | head -n 1)
-          new_apk_name="musily-${{ needs.metadata.outputs.version }}.apk"
-          mv "$apk_path" "dist/$new_apk_name"
+          target="dist/libraudio-${{ needs.metadata.outputs.version }}.apk"
+          if [ ! -f "$target" ]; then
+            apk_path=$(find dist -name "*.apk" | head -n 1)
+            mv "$apk_path" "$target"
+          fi
         shell: bash
 
       - name: Create GitHub Release
@@ -245,7 +256,7 @@ jobs:
             dist/**/*.tar.gz
             dist/**/*.exe
             dist/**/*.run
-            dist/musily-${{ needs.metadata.outputs.version }}.apk
+            dist/libraudio-${{ needs.metadata.outputs.version }}.apk
 
   publish_on_telegram:
     name: Publish on Telegram
@@ -296,10 +307,10 @@ jobs:
       - name: Calculate SHA256 and Update musily.json
         run: |
           cd flathub
-          TAR_FILE=$(find ../dist -name "*.tar.gz")
+          TAR_FILE=$(find ../dist -name "*linux-x64.tar.gz")
           SHA256=$(sha256sum "$TAR_FILE" | awk '{print $1}')
           VERSION="${{ needs.metadata.outputs.version }}"
-          URL="https://github.com/${{ github.repository }}/releases/download/${VERSION}/musily-linux-x64.tar.gz"
+          URL="https://github.com/${{ github.repository }}/releases/download/${VERSION}/libraudio-linux-x64.tar.gz"
 
           cat > modules/musily.json << EOF
           {
