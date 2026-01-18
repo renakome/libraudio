@@ -80,7 +80,7 @@ jobs:
         if: matrix.os == 'ubuntu-22.04'
         run: |
           echo "${{ secrets.KEY_PROPERTIES_BASE64 }}" | base64 --decode > android/key.properties
-          echo "${{ secrets.KEY_STORE_BASE64 }}" | base64 --decode > android/app/key.jks
+          echo "${{ secrets.KEY_STORE_BASE64 }}" | base64 --decode > android/android_signing_key.jks
           flutter build apk --release --flavor stable
 
       - name: Rename Android APK
