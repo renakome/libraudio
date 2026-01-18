@@ -1,5 +1,5 @@
 # Project Metadata
-name: Libraudio
+name: musily
 description: "A great music app."
 publish_to: "none" # Set to 'none' to prevent publishing to pub.dev
 version: 5.0.2
