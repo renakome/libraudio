@@ -1,6 +1,6 @@
 [submodule "flathub"]
 	path = flathub
-	url = git@github.com:MusilyApp/flathub.git
+	url = https://github.com/renakome/flathub.git
 [submodule "musily_installer"]
 	path = musily_installer
-	url = git@github.com:MusilyApp/musily_installer.git
+	url = https://github.com/renakome/libraudio_installer.git
