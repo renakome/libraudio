@@ -1,0 +1,2124 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:intl/intl.dart' as intl;
+
+import 'app_localizations_ar.dart';
+import 'app_localizations_de.dart';
+import 'app_localizations_en.dart';
+import 'app_localizations_es.dart';
+import 'app_localizations_fr.dart';
+import 'app_localizations_hi.dart';
+import 'app_localizations_id.dart';
+import 'app_localizations_it.dart';
+import 'app_localizations_ja.dart';
+import 'app_localizations_ko.dart';
+import 'app_localizations_pl.dart';
+import 'app_localizations_pt.dart';
+import 'app_localizations_ru.dart';
+import 'app_localizations_th.dart';
+import 'app_localizations_tr.dart';
+import 'app_localizations_uk.dart';
+import 'app_localizations_zh.dart';
+
+// ignore_for_file: type=lint
+
+/// Callers can lookup localized strings with an instance of AppLocalizations
+/// returned by `AppLocalizations.of(context)`.
+///
+/// Applications need to include `AppLocalizations.delegate()` in their app's
+/// `localizationDelegates` list, and the locales they support in the app's
+/// `supportedLocales` list. For example:
+///
+/// ```dart
+/// import 'l10n/app_localizations.dart';
+///
+/// return MaterialApp(
+///   localizationsDelegates: AppLocalizations.localizationsDelegates,
+///   supportedLocales: AppLocalizations.supportedLocales,
+///   home: MyApplicationHome(),
+/// );
+/// ```
+///
+/// ## Update pubspec.yaml
+///
+/// Please make sure to update your pubspec.yaml to include the following
+/// packages:
+///
+/// ```yaml
+/// dependencies:
+///   # Internationalization support.
+///   flutter_localizations:
+///     sdk: flutter
+///   intl: any # Use the pinned version from flutter_localizations
+///
+///   # Rest of dependencies
+/// ```
+///
+/// ## iOS Applications
+///
+/// iOS applications define key application metadata, including supported
+/// locales, in an Info.plist file that is built into the application bundle.
+/// To configure the locales supported by your app, you’ll need to edit this
+/// file.
+///
+/// First, open your project’s ios/Runner.xcworkspace Xcode workspace file.
+/// Then, in the Project Navigator, open the Info.plist file under the Runner
+/// project’s Runner folder.
+///
+/// Next, select the Information Property List item, select Add Item from the
+/// Editor menu, then select Localizations from the pop-up menu.
+///
+/// Select and expand the newly-created Localizations item then, for each
+/// locale your application supports, add a new item and select the locale
+/// you wish to add from the pop-up menu in the Value field. This list should
+/// be consistent with the languages listed in the AppLocalizations.supportedLocales
+/// property.
+abstract class AppLocalizations {
+  AppLocalizations(String locale)
+      : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+
+  final String localeName;
+
+  static AppLocalizations? of(BuildContext context) {
+    return Localizations.of<AppLocalizations>(context, AppLocalizations);
+  }
+
+  static const LocalizationsDelegate<AppLocalizations> delegate =
+      _AppLocalizationsDelegate();
+
+  /// A list of this localizations delegate along with the default localizations
+  /// delegates.
+  ///
+  /// Returns a list of localizations delegates containing this delegate along with
+  /// GlobalMaterialLocalizations.delegate, GlobalCupertinoLocalizations.delegate,
+  /// and GlobalWidgetsLocalizations.delegate.
+  ///
+  /// Additional delegates can be added by appending to this list in
+  /// MaterialApp. This list does not have to be used at all if a custom list
+  /// of delegates is preferred or required.
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
+      <LocalizationsDelegate<dynamic>>[
+    delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+  ];
+
+  /// A list of this localizations delegate's supported locales.
+  static const List<Locale> supportedLocales = <Locale>[
+    Locale('ar'),
+    Locale('de'),
+    Locale('en'),
+    Locale('es'),
+    Locale('fr'),
+    Locale('hi'),
+    Locale('id'),
+    Locale('it'),
+    Locale('ja'),
+    Locale('ko'),
+    Locale('pl'),
+    Locale('pt'),
+    Locale('ru'),
+    Locale('th'),
+    Locale('tr'),
+    Locale('uk'),
+    Locale('zh')
+  ];
+
+  /// No description provided for @home.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get home;
+
+  /// No description provided for @search.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get search;
+
+  /// No description provided for @library.
+  ///
+  /// In en, this message translates to:
+  /// **'Library'**
+  String get library;
+
+  /// No description provided for @favorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorites'**
+  String get favorites;
+
+  /// No description provided for @searchMusicAlbumOrArtist.
+  ///
+  /// In en, this message translates to:
+  /// **'Search Music, Album, or Artist'**
+  String get searchMusicAlbumOrArtist;
+
+  /// No description provided for @musics.
+  ///
+  /// In en, this message translates to:
+  /// **'Music'**
+  String get musics;
+
+  /// No description provided for @albums.
+  ///
+  /// In en, this message translates to:
+  /// **'Albums'**
+  String get albums;
+
+  /// No description provided for @artists.
+  ///
+  /// In en, this message translates to:
+  /// **'Artists'**
+  String get artists;
+
+  /// No description provided for @all.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get all;
+
+  /// No description provided for @playlists.
+  ///
+  /// In en, this message translates to:
+  /// **'Playlists'**
+  String get playlists;
+
+  /// No description provided for @download.
+  ///
+  /// In en, this message translates to:
+  /// **'Download'**
+  String get download;
+
+  /// No description provided for @addToPlaylist.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to Playlist'**
+  String get addToPlaylist;
+
+  /// No description provided for @addToQueue.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to Queue'**
+  String get addToQueue;
+
+  /// No description provided for @goToAlbum.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to Album'**
+  String get goToAlbum;
+
+  /// No description provided for @goToArtist.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to Artist'**
+  String get goToArtist;
+
+  /// No description provided for @share.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get share;
+
+  /// No description provided for @play.
+  ///
+  /// In en, this message translates to:
+  /// **'Play'**
+  String get play;
+
+  /// No description provided for @shufflePlay.
+  ///
+  /// In en, this message translates to:
+  /// **'Shuffle Play'**
+  String get shufflePlay;
+
+  /// No description provided for @addToLibrary.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to Library'**
+  String get addToLibrary;
+
+  /// No description provided for @follow.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow'**
+  String get follow;
+
+  /// No description provided for @following.
+  ///
+  /// In en, this message translates to:
+  /// **'Following'**
+  String get following;
+
+  /// No description provided for @more.
+  ///
+  /// In en, this message translates to:
+  /// **'More'**
+  String get more;
+
+  /// No description provided for @topSongs.
+  ///
+  /// In en, this message translates to:
+  /// **'Top Songs'**
+  String get topSongs;
+
+  /// No description provided for @topAlbums.
+  ///
+  /// In en, this message translates to:
+  /// **'Top Albums'**
+  String get topAlbums;
+
+  /// No description provided for @topSingles.
+  ///
+  /// In en, this message translates to:
+  /// **'Top Singles'**
+  String get topSingles;
+
+  /// No description provided for @similarArtists.
+  ///
+  /// In en, this message translates to:
+  /// **'Similar Artists'**
+  String get similarArtists;
+
+  /// No description provided for @removeFromLibrary.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from Library'**
+  String get removeFromLibrary;
+
+  /// No description provided for @createPlaylist.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Playlist'**
+  String get createPlaylist;
+
+  /// No description provided for @playlistName.
+  ///
+  /// In en, this message translates to:
+  /// **'Playlist Name'**
+  String get playlistName;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// No description provided for @back.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get back;
+
+  /// No description provided for @create.
+  ///
+  /// In en, this message translates to:
+  /// **'Create'**
+  String get create;
+
+  /// No description provided for @playlist.
+  ///
+  /// In en, this message translates to:
+  /// **'Playlist'**
+  String get playlist;
+
+  /// No description provided for @songs.
+  ///
+  /// In en, this message translates to:
+  /// **'Songs'**
+  String get songs;
+
+  /// No description provided for @deletePlaylist.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Playlist'**
+  String get deletePlaylist;
+
+  /// No description provided for @editPlaylist.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Playlist'**
+  String get editPlaylist;
+
+  /// No description provided for @confirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get confirm;
+
+  /// No description provided for @doYouWantToDeleteThePlaylist.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you want to delete the playlist?'**
+  String get doYouWantToDeleteThePlaylist;
+
+  /// No description provided for @delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
+
+  /// No description provided for @theActionCannotBeUndone.
+  ///
+  /// In en, this message translates to:
+  /// **'This action cannot be undone.'**
+  String get theActionCannotBeUndone;
+
+  /// No description provided for @playingNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Now Playing'**
+  String get playingNow;
+
+  /// No description provided for @emptyLibrary.
+  ///
+  /// In en, this message translates to:
+  /// **'Your library is empty'**
+  String get emptyLibrary;
+
+  /// No description provided for @emptyLibraryDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Add items to your library to see them here'**
+  String get emptyLibraryDescription;
+
+  /// No description provided for @albumNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Album not found'**
+  String get albumNotFound;
+
+  /// No description provided for @artistNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Artist not found'**
+  String get artistNotFound;
+
+  /// No description provided for @cancelDownload.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel Download'**
+  String get cancelDownload;
+
+  /// No description provided for @pause.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause'**
+  String get pause;
+
+  /// No description provided for @album.
+  ///
+  /// In en, this message translates to:
+  /// **'Album'**
+  String get album;
+
+  /// No description provided for @singles.
+  ///
+  /// In en, this message translates to:
+  /// **'Singles'**
+  String get singles;
+
+  /// No description provided for @noMoreSingles.
+  ///
+  /// In en, this message translates to:
+  /// **'No more singles available for this artist.'**
+  String get noMoreSingles;
+
+  /// No description provided for @noMoreAlbums.
+  ///
+  /// In en, this message translates to:
+  /// **'No more albums available for this artist.'**
+  String get noMoreAlbums;
+
+  /// No description provided for @songsNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No songs found.'**
+  String get songsNotFound;
+
+  /// No description provided for @playlistNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Playlist not found.'**
+  String get playlistNotFound;
+
+  /// No description provided for @requiredField.
+  ///
+  /// In en, this message translates to:
+  /// **'This field is required.'**
+  String get requiredField;
+
+  /// No description provided for @deleteDownload.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Download'**
+  String get deleteDownload;
+
+  /// No description provided for @noPlaylists.
+  ///
+  /// In en, this message translates to:
+  /// **'You have no playlists.'**
+  String get noPlaylists;
+
+  /// No description provided for @removeFromPlaylist.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from Playlist'**
+  String get removeFromPlaylist;
+
+  /// No description provided for @downloadManager.
+  ///
+  /// In en, this message translates to:
+  /// **'Download Manager'**
+  String get downloadManager;
+
+  /// No description provided for @downloads.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloads'**
+  String get downloads;
+
+  /// No description provided for @offline.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline'**
+  String get offline;
+
+  /// No description provided for @offlineMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline Mode'**
+  String get offlineMode;
+
+  /// No description provided for @offlineModeDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'You are currently offline. Some features may be unavailable.'**
+  String get offlineModeDescription;
+
+  /// No description provided for @lyricsNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Lyrics not found'**
+  String get lyricsNotFound;
+
+  /// No description provided for @lyricsNotSynced.
+  ///
+  /// In en, this message translates to:
+  /// **'Lyrics are not synchronized'**
+  String get lyricsNotSynced;
+
+  /// No description provided for @lyricsNotSyncedDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'These lines will not move with the music playback.'**
+  String get lyricsNotSyncedDescription;
+
+  /// No description provided for @lyricsParsedSync.
+  ///
+  /// In en, this message translates to:
+  /// **'We synced this lyric for you'**
+  String get lyricsParsedSync;
+
+  /// No description provided for @lyricsParsedSyncDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'It was generated automatically and may be slightly off the beat.'**
+  String get lyricsParsedSyncDescription;
+
+  /// No description provided for @lyrics.
+  ///
+  /// In en, this message translates to:
+  /// **'Lyrics'**
+  String get lyrics;
+
+  /// No description provided for @settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settings;
+
+  /// No description provided for @accounts.
+  ///
+  /// In en, this message translates to:
+  /// **'Accounts'**
+  String get accounts;
+
+  /// No description provided for @language.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get language;
+
+  /// No description provided for @theme.
+  ///
+  /// In en, this message translates to:
+  /// **'Theme'**
+  String get theme;
+
+  /// No description provided for @dark.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get dark;
+
+  /// No description provided for @light.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get light;
+
+  /// No description provided for @system.
+  ///
+  /// In en, this message translates to:
+  /// **'System'**
+  String get system;
+
+  /// No description provided for @licenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Licenses'**
+  String get licenses;
+
+  /// No description provided for @about.
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get about;
+
+  /// No description provided for @aboutSupporters.
+  ///
+  /// In en, this message translates to:
+  /// **'About & Supporters'**
+  String get aboutSupporters;
+
+  /// No description provided for @application.
+  ///
+  /// In en, this message translates to:
+  /// **'Application'**
+  String get application;
+
+  /// No description provided for @others.
+  ///
+  /// In en, this message translates to:
+  /// **'Others'**
+  String get others;
+
+  /// No description provided for @supportersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Supporters'**
+  String get supportersTitle;
+
+  /// No description provided for @supportersEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No supporters listed yet.'**
+  String get supportersEmpty;
+
+  /// No description provided for @close.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get close;
+
+  /// No description provided for @copiedToClipboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied to the clipboard'**
+  String get copiedToClipboard;
+
+  /// No description provided for @noDownloads.
+  ///
+  /// In en, this message translates to:
+  /// **'No downloads'**
+  String get noDownloads;
+
+  /// No description provided for @noResults.
+  ///
+  /// In en, this message translates to:
+  /// **'No results'**
+  String get noResults;
+
+  /// No description provided for @tryDifferentKeywords.
+  ///
+  /// In en, this message translates to:
+  /// **'Try different keywords or check your spelling'**
+  String get tryDifferentKeywords;
+
+  /// No description provided for @downloadCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Download completed'**
+  String get downloadCompleted;
+
+  /// No description provided for @selectALanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a language'**
+  String get selectALanguage;
+
+  /// No description provided for @account.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get account;
+
+  /// No description provided for @login.
+  ///
+  /// In en, this message translates to:
+  /// **'Login'**
+  String get login;
+
+  /// No description provided for @email.
+  ///
+  /// In en, this message translates to:
+  /// **'E-mail'**
+  String get email;
+
+  /// No description provided for @password.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get password;
+
+  /// No description provided for @pleaseEnterYourEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your e-mail'**
+  String get pleaseEnterYourEmail;
+
+  /// No description provided for @pleaseEnterAValidEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid e-mail'**
+  String get pleaseEnterAValidEmail;
+
+  /// No description provided for @pleaseEnterYourPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your password'**
+  String get pleaseEnterYourPassword;
+
+  /// No description provided for @passwordMustBeAtLeast8Characters.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 8 characters'**
+  String get passwordMustBeAtLeast8Characters;
+
+  /// No description provided for @createAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Account'**
+  String get createAccount;
+
+  /// No description provided for @name.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get name;
+
+  /// No description provided for @pleaseEnterYourName.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your name'**
+  String get pleaseEnterYourName;
+
+  /// No description provided for @artist.
+  ///
+  /// In en, this message translates to:
+  /// **'Artist'**
+  String get artist;
+
+  /// No description provided for @internalServerError.
+  ///
+  /// In en, this message translates to:
+  /// **'Internal server error'**
+  String get internalServerError;
+
+  /// No description provided for @invalidRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid request'**
+  String get invalidRequest;
+
+  /// No description provided for @emailAlreadyInUse.
+  ///
+  /// In en, this message translates to:
+  /// **'The email is already in use'**
+  String get emailAlreadyInUse;
+
+  /// No description provided for @invalidCredentials.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid credentials'**
+  String get invalidCredentials;
+
+  /// No description provided for @loginRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Login required'**
+  String get loginRequired;
+
+  /// No description provided for @itemNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Item not found'**
+  String get itemNotFound;
+
+  /// No description provided for @invalidUserId.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid user ID'**
+  String get invalidUserId;
+
+  /// No description provided for @userNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'User not found'**
+  String get userNotFound;
+
+  /// No description provided for @comeCheckTEMPLATEOnMusily.
+  ///
+  /// In en, this message translates to:
+  /// **'Come check TEMPLATE on Musily!'**
+  String get comeCheckTEMPLATEOnMusily;
+
+  /// No description provided for @backup.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup'**
+  String get backup;
+
+  /// No description provided for @restore.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore'**
+  String get restore;
+
+  /// No description provided for @backupLibrary.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup Library'**
+  String get backupLibrary;
+
+  /// No description provided for @backupCompletedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup completed successfully!'**
+  String get backupCompletedSuccessfully;
+
+  /// No description provided for @backupFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup failed'**
+  String get backupFailed;
+
+  /// No description provided for @includeLibrary.
+  ///
+  /// In en, this message translates to:
+  /// **'Include Library'**
+  String get includeLibrary;
+
+  /// No description provided for @includeDownloads.
+  ///
+  /// In en, this message translates to:
+  /// **'Include Downloads'**
+  String get includeDownloads;
+
+  /// No description provided for @startBackup.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Backup'**
+  String get startBackup;
+
+  /// No description provided for @doYouWantToRestoreThisBackup.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you want to restore this backup?'**
+  String get doYouWantToRestoreThisBackup;
+
+  /// No description provided for @backupInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup in progress'**
+  String get backupInProgress;
+
+  /// No description provided for @backupRestoredSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup restored successfully'**
+  String get backupRestoredSuccessfully;
+
+  /// No description provided for @backupFileDoesNotExist.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup file does not exist'**
+  String get backupFileDoesNotExist;
+
+  /// No description provided for @musicSavedToDownloads.
+  ///
+  /// In en, this message translates to:
+  /// **'Music saved to downloads'**
+  String get musicSavedToDownloads;
+
+  /// No description provided for @saveToDownloads.
+  ///
+  /// In en, this message translates to:
+  /// **'Save to Downloads'**
+  String get saveToDownloads;
+
+  /// No description provided for @importingPlaylist.
+  ///
+  /// In en, this message translates to:
+  /// **'Importing Playlist'**
+  String get importingPlaylist;
+
+  /// No description provided for @playlistNameOrUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Playlist name or URL'**
+  String get playlistNameOrUrl;
+
+  /// No description provided for @hide.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide'**
+  String get hide;
+
+  /// No description provided for @whenClosingTheApplication.
+  ///
+  /// In en, this message translates to:
+  /// **'When closing the application'**
+  String get whenClosingTheApplication;
+
+  /// No description provided for @showWindow.
+  ///
+  /// In en, this message translates to:
+  /// **'Show Window'**
+  String get showWindow;
+
+  /// No description provided for @closeWindow.
+  ///
+  /// In en, this message translates to:
+  /// **'Close Window'**
+  String get closeWindow;
+
+  /// No description provided for @newUpdateAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'New Update Available'**
+  String get newUpdateAvailable;
+
+  /// No description provided for @defaultColor.
+  ///
+  /// In en, this message translates to:
+  /// **'Default Color'**
+  String get defaultColor;
+
+  /// No description provided for @accentColor.
+  ///
+  /// In en, this message translates to:
+  /// **'Accent Color'**
+  String get accentColor;
+
+  /// No description provided for @audioQuality.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio Quality'**
+  String get audioQuality;
+
+  /// No description provided for @audioQualityAuto.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto'**
+  String get audioQualityAuto;
+
+  /// No description provided for @audioQualityHigh.
+  ///
+  /// In en, this message translates to:
+  /// **'High'**
+  String get audioQualityHigh;
+
+  /// No description provided for @audioQualityLow.
+  ///
+  /// In en, this message translates to:
+  /// **'Low'**
+  String get audioQualityLow;
+
+  /// No description provided for @skipSilence.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip Silence'**
+  String get skipSilence;
+
+  /// No description provided for @audioNormalization.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio Normalization'**
+  String get audioNormalization;
+
+  /// No description provided for @persistentQueue.
+  ///
+  /// In en, this message translates to:
+  /// **'Persistent Queue'**
+  String get persistentQueue;
+
+  /// No description provided for @persistentQueueDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep playback queue between sessions'**
+  String get persistentQueueDesc;
+
+  /// No description provided for @autoLoadMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto Load More'**
+  String get autoLoadMore;
+
+  /// No description provided for @autoLoadMoreDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatically load more songs when queue is ending'**
+  String get autoLoadMoreDesc;
+
+  /// No description provided for @enableSimilarContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable Similar Content'**
+  String get enableSimilarContent;
+
+  /// No description provided for @similarContentDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggest similar songs based on what you\'re listening to'**
+  String get similarContentDesc;
+
+  /// No description provided for @autoSkipNextOnError.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto Skip Next on Error'**
+  String get autoSkipNextOnError;
+
+  /// No description provided for @autoSkipNextOnErrorDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatically skip to next song if there\'s an error'**
+  String get autoSkipNextOnErrorDesc;
+
+  /// No description provided for @stopMusicOnTaskClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop Music on Task Clear'**
+  String get stopMusicOnTaskClear;
+
+  /// No description provided for @playerBackgroundStyle.
+  ///
+  /// In en, this message translates to:
+  /// **'Player Background Style'**
+  String get playerBackgroundStyle;
+
+  /// No description provided for @playerButtonsStyle.
+  ///
+  /// In en, this message translates to:
+  /// **'Player Buttons Style'**
+  String get playerButtonsStyle;
+
+  /// No description provided for @sliderStyle.
+  ///
+  /// In en, this message translates to:
+  /// **'Slider Style'**
+  String get sliderStyle;
+
+  /// No description provided for @gridItemSize.
+  ///
+  /// In en, this message translates to:
+  /// **'Grid Item Size'**
+  String get gridItemSize;
+
+  /// No description provided for @dynamicTheme.
+  ///
+  /// In en, this message translates to:
+  /// **'Dynamic Theme'**
+  String get dynamicTheme;
+
+  /// No description provided for @pureBlack.
+  ///
+  /// In en, this message translates to:
+  /// **'Pure Black'**
+  String get pureBlack;
+
+  /// No description provided for @rotateBackground.
+  ///
+  /// In en, this message translates to:
+  /// **'Rotate Background'**
+  String get rotateBackground;
+
+  /// No description provided for @animateLyrics.
+  ///
+  /// In en, this message translates to:
+  /// **'Animate Lyrics'**
+  String get animateLyrics;
+
+  /// No description provided for @swipeThumbnail.
+  ///
+  /// In en, this message translates to:
+  /// **'Swipe Thumbnail'**
+  String get swipeThumbnail;
+
+  /// No description provided for @privacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy'**
+  String get privacy;
+
+  /// No description provided for @pauseListenHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause Listen History'**
+  String get pauseListenHistory;
+
+  /// No description provided for @pauseSearchHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause Search History'**
+  String get pauseSearchHistory;
+
+  /// No description provided for @disableScreenshot.
+  ///
+  /// In en, this message translates to:
+  /// **'Disable Screenshot'**
+  String get disableScreenshot;
+
+  /// No description provided for @storage.
+  ///
+  /// In en, this message translates to:
+  /// **'Storage'**
+  String get storage;
+
+  /// No description provided for @imageCacheSize.
+  ///
+  /// In en, this message translates to:
+  /// **'Image Cache Size'**
+  String get imageCacheSize;
+
+  /// No description provided for @songCacheSize.
+  ///
+  /// In en, this message translates to:
+  /// **'Song Cache Size'**
+  String get songCacheSize;
+
+  /// No description provided for @radio.
+  ///
+  /// In en, this message translates to:
+  /// **'Radio'**
+  String get radio;
+
+  /// No description provided for @radioStations.
+  ///
+  /// In en, this message translates to:
+  /// **'Radio Stations'**
+  String get radioStations;
+
+  /// No description provided for @popularStations.
+  ///
+  /// In en, this message translates to:
+  /// **'Popular Stations'**
+  String get popularStations;
+
+  /// No description provided for @newsStations.
+  ///
+  /// In en, this message translates to:
+  /// **'News Stations'**
+  String get newsStations;
+
+  /// No description provided for @musicStations.
+  ///
+  /// In en, this message translates to:
+  /// **'Music Stations'**
+  String get musicStations;
+
+  /// No description provided for @jazzStations.
+  ///
+  /// In en, this message translates to:
+  /// **'Jazz Stations'**
+  String get jazzStations;
+
+  /// No description provided for @searchStations.
+  ///
+  /// In en, this message translates to:
+  /// **'Search stations...'**
+  String get searchStations;
+
+  /// No description provided for @noStationsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No stations found'**
+  String get noStationsFound;
+
+  /// No description provided for @radioNotAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Radio not available'**
+  String get radioNotAvailable;
+
+  /// No description provided for @radioLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading stations...'**
+  String get radioLoading;
+
+  /// No description provided for @radioError.
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading radios'**
+  String get radioError;
+
+  /// No description provided for @radioCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'Radio Categories'**
+  String get radioCategories;
+
+  /// No description provided for @startRadio.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Radio'**
+  String get startRadio;
+
+  /// No description provided for @smartCurrentRadio.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart Radio'**
+  String get smartCurrentRadio;
+
+  /// No description provided for @smartCurrentRadioDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Radio based on the currently playing song'**
+  String get smartCurrentRadioDescription;
+
+  /// No description provided for @smartPopularRadio.
+  ///
+  /// In en, this message translates to:
+  /// **'Popular Radio'**
+  String get smartPopularRadio;
+
+  /// No description provided for @smartPopularRadioDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Most popular songs right now'**
+  String get smartPopularRadioDescription;
+
+  /// No description provided for @smartDiscoveryRadio.
+  ///
+  /// In en, this message translates to:
+  /// **'Discoveries'**
+  String get smartDiscoveryRadio;
+
+  /// No description provided for @smartDiscoveryRadioDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'New songs to discover'**
+  String get smartDiscoveryRadioDescription;
+
+  /// No description provided for @intelligentGenre.
+  ///
+  /// In en, this message translates to:
+  /// **'Intelligent'**
+  String get intelligentGenre;
+
+  /// No description provided for @playerAndAudio.
+  ///
+  /// In en, this message translates to:
+  /// **'Player / Audio'**
+  String get playerAndAudio;
+
+  /// No description provided for @recommendedAlbums.
+  ///
+  /// In en, this message translates to:
+  /// **'Recommended Albums'**
+  String get recommendedAlbums;
+
+  /// No description provided for @recommendedMusic.
+  ///
+  /// In en, this message translates to:
+  /// **'Recommended Music'**
+  String get recommendedMusic;
+
+  /// No description provided for @moreRecommendations.
+  ///
+  /// In en, this message translates to:
+  /// **'More Recommendations'**
+  String get moreRecommendations;
+
+  /// No description provided for @cancelOperation.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel Operation?'**
+  String get cancelOperation;
+
+  /// No description provided for @cancelBackupConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to cancel the backup? Progress will be lost.'**
+  String get cancelBackupConfirmation;
+
+  /// No description provided for @cancelRestoreConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to cancel the restore? Progress will be lost.'**
+  String get cancelRestoreConfirmation;
+
+  /// No description provided for @yes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get yes;
+
+  /// No description provided for @no.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get no;
+
+  /// No description provided for @initializingBackup.
+  ///
+  /// In en, this message translates to:
+  /// **'Initializing backup...'**
+  String get initializingBackup;
+
+  /// No description provided for @creatingBackupArchive.
+  ///
+  /// In en, this message translates to:
+  /// **'Creating backup archive...'**
+  String get creatingBackupArchive;
+
+  /// No description provided for @backingUpDownloadsMetadata.
+  ///
+  /// In en, this message translates to:
+  /// **'Backing up downloads metadata...'**
+  String get backingUpDownloadsMetadata;
+
+  /// No description provided for @backingUpAudioFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Backing up audio files...'**
+  String get backingUpAudioFiles;
+
+  /// No description provided for @backingUpLibraryData.
+  ///
+  /// In en, this message translates to:
+  /// **'Backing up library data...'**
+  String get backingUpLibraryData;
+
+  /// No description provided for @writingBackupFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Writing backup file...'**
+  String get writingBackupFile;
+
+  /// No description provided for @savingToStorage.
+  ///
+  /// In en, this message translates to:
+  /// **'Saving to storage...'**
+  String get savingToStorage;
+
+  /// No description provided for @backupCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup cancelled'**
+  String get backupCancelled;
+
+  /// No description provided for @startingBackup.
+  ///
+  /// In en, this message translates to:
+  /// **'Starting backup...'**
+  String get startingBackup;
+
+  /// No description provided for @startingRestore.
+  ///
+  /// In en, this message translates to:
+  /// **'Starting restore...'**
+  String get startingRestore;
+
+  /// No description provided for @initializingRestore.
+  ///
+  /// In en, this message translates to:
+  /// **'Initializing restore...'**
+  String get initializingRestore;
+
+  /// No description provided for @readingBackupFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading backup file...'**
+  String get readingBackupFile;
+
+  /// No description provided for @extractingLibraryData.
+  ///
+  /// In en, this message translates to:
+  /// **'Extracting library data...'**
+  String get extractingLibraryData;
+
+  /// No description provided for @extractingDownloadsData.
+  ///
+  /// In en, this message translates to:
+  /// **'Extracting downloads data...'**
+  String get extractingDownloadsData;
+
+  /// No description provided for @extractingAudioFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Extracting audio files...'**
+  String get extractingAudioFiles;
+
+  /// No description provided for @finalizingRestore.
+  ///
+  /// In en, this message translates to:
+  /// **'Finalizing restore...'**
+  String get finalizingRestore;
+
+  /// No description provided for @restoreCompletedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore completed successfully!'**
+  String get restoreCompletedSuccessfully;
+
+  /// No description provided for @restoreFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore failed'**
+  String get restoreFailed;
+
+  /// No description provided for @backupFileNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup file not found'**
+  String get backupFileNotFound;
+
+  /// No description provided for @savedTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved to: {filename}'**
+  String savedTo(String filename);
+
+  /// No description provided for @playlistEditSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Give your playlist a fresh identity.'**
+  String get playlistEditSubtitle;
+
+  /// No description provided for @playlistDetailsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Details'**
+  String get playlistDetailsTitle;
+
+  /// No description provided for @playlistEmptyStateDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a playlist to start saving your favourite tracks.'**
+  String get playlistEmptyStateDescription;
+
+  /// No description provided for @playlistSelectTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a playlist'**
+  String get playlistSelectTitle;
+
+  /// No description provided for @playlistSelectDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose where the selected tracks should be added.'**
+  String get playlistSelectDescription;
+
+  /// No description provided for @playlistCreatorSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a name or paste a playlist link'**
+  String get playlistCreatorSubtitle;
+
+  /// No description provided for @playlistCreatorPasteInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'You can paste a YouTube playlist URL to import it automatically.'**
+  String get playlistCreatorPasteInfo;
+
+  /// No description provided for @artistNotFoundDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'The artist you are looking for was not found.'**
+  String get artistNotFoundDescription;
+
+  /// No description provided for @artistNoSinglesDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'No singles available for this artist.'**
+  String get artistNoSinglesDescription;
+
+  /// No description provided for @artistNoAlbumsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'No albums available for this artist.'**
+  String get artistNoAlbumsDescription;
+
+  /// No description provided for @artistNoSongsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'No songs available for this artist.'**
+  String get artistNoSongsDescription;
+
+  /// No description provided for @lyricsNotAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No lyrics available for this track.'**
+  String get lyricsNotAvailable;
+
+  /// No description provided for @queueEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your queue is empty'**
+  String get queueEmptyTitle;
+
+  /// No description provided for @queueEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Add songs to the queue to enjoy your music experience.'**
+  String get queueEmptyMessage;
+
+  /// No description provided for @noItemsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No items found'**
+  String get noItemsFound;
+
+  /// No description provided for @downloadsEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your downloaded tracks will appear here.'**
+  String get downloadsEmptyMessage;
+
+  /// No description provided for @downloadingSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading'**
+  String get downloadingSectionTitle;
+
+  /// No description provided for @queuedSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Queued'**
+  String get queuedSectionTitle;
+
+  /// No description provided for @completedSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get completedSectionTitle;
+
+  /// No description provided for @failedSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed'**
+  String get failedSectionTitle;
+
+  /// No description provided for @searchSuggestions.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggestions'**
+  String get searchSuggestions;
+
+  /// No description provided for @searchStartTyping.
+  ///
+  /// In en, this message translates to:
+  /// **'Start typing to search'**
+  String get searchStartTyping;
+
+  /// No description provided for @smartSuggestionsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart Suggestions'**
+  String get smartSuggestionsTitle;
+
+  /// No description provided for @smartSuggestionsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-add similar tracks'**
+  String get smartSuggestionsDescription;
+
+  /// No description provided for @libraryManagementSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Library Management'**
+  String get libraryManagementSectionTitle;
+
+  /// No description provided for @localLibraryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Local Library'**
+  String get localLibraryTitle;
+
+  /// No description provided for @localLibraryDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage folders from your device to play local audio files.'**
+  String get localLibraryDescription;
+
+  /// Fallback label used when a local track has no artist metadata.
+  ///
+  /// In en, this message translates to:
+  /// **'Local Files'**
+  String get localFilesLabel;
+
+  /// No description provided for @manageLocalFolders.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage local folders'**
+  String get manageLocalFolders;
+
+  /// No description provided for @manageLocalFoldersDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Add, rename or remove directories synced with your Musily library.'**
+  String get manageLocalFoldersDescription;
+
+  /// No description provided for @addLocalFolder.
+  ///
+  /// In en, this message translates to:
+  /// **'Add local folder'**
+  String get addLocalFolder;
+
+  /// No description provided for @emptyLocalLibrary.
+  ///
+  /// In en, this message translates to:
+  /// **'No local folders yet'**
+  String get emptyLocalLibrary;
+
+  /// No description provided for @emptyLocalLibraryDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a folder from your device to keep local songs accessible inside Musily.'**
+  String get emptyLocalLibraryDescription;
+
+  /// No description provided for @chooseDirectory.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose directory'**
+  String get chooseDirectory;
+
+  /// No description provided for @invalidDirectory.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid directory'**
+  String get invalidDirectory;
+
+  /// No description provided for @invalidDirectoryDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'We could not access this folder. Update the path or remove the entry.'**
+  String get invalidDirectoryDescription;
+
+  /// No description provided for @removeLocalFolderConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove \"{name}\" from your local library?'**
+  String removeLocalFolderConfirmation(String name);
+
+  /// No description provided for @emptyLocalPlaylist.
+  ///
+  /// In en, this message translates to:
+  /// **'No songs found'**
+  String get emptyLocalPlaylist;
+
+  /// No description provided for @emptyLocalPlaylistDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Make sure the folder still exists and that it contains supported audio files.'**
+  String get emptyLocalPlaylistDescription;
+
+  /// No description provided for @changeDirectory.
+  ///
+  /// In en, this message translates to:
+  /// **'Change directory'**
+  String get changeDirectory;
+
+  /// No description provided for @updateDirectory.
+  ///
+  /// In en, this message translates to:
+  /// **'Update directory'**
+  String get updateDirectory;
+
+  /// No description provided for @localFolderPreviewOverflow.
+  ///
+  /// In en, this message translates to:
+  /// **'+{count} more folders'**
+  String localFolderPreviewOverflow(int count);
+
+  /// No description provided for @open.
+  ///
+  /// In en, this message translates to:
+  /// **'Open'**
+  String get open;
+
+  /// No description provided for @rename.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename'**
+  String get rename;
+
+  /// No description provided for @remove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get remove;
+
+  /// No description provided for @refresh.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh'**
+  String get refresh;
+
+  /// No description provided for @backupLibraryDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a backup of your library'**
+  String get backupLibraryDescription;
+
+  /// No description provided for @restoreLibraryDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore your library from a backup'**
+  String get restoreLibraryDescription;
+
+  /// No description provided for @includeLibraryDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup your saved albums, artists, and playlists'**
+  String get includeLibraryDescription;
+
+  /// No description provided for @includeDownloadsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup your downloaded tracks'**
+  String get includeDownloadsDescription;
+
+  /// No description provided for @fullScreenPlayerTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Full screen player'**
+  String get fullScreenPlayerTooltip;
+
+  /// No description provided for @sleepTimer.
+  ///
+  /// In en, this message translates to:
+  /// **'Sleep Timer'**
+  String get sleepTimer;
+
+  /// No description provided for @sleepTimerDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Music will pause after selected time'**
+  String get sleepTimerDescription;
+
+  /// No description provided for @sleepTimerActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Sleep timer: {time}'**
+  String sleepTimerActive(String time);
+
+  /// No description provided for @minutes.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} min'**
+  String minutes(int count);
+
+  /// No description provided for @hours.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} hours'**
+  String hours(int count);
+
+  /// No description provided for @hour.
+  ///
+  /// In en, this message translates to:
+  /// **'1 hour'**
+  String get hour;
+
+  /// No description provided for @customTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom'**
+  String get customTime;
+
+  /// No description provided for @enterTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter time'**
+  String get enterTime;
+
+  /// No description provided for @minutesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Minutes'**
+  String get minutesLabel;
+
+  /// No description provided for @hoursLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Hours'**
+  String get hoursLabel;
+
+  /// No description provided for @cancelTimer.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel Timer'**
+  String get cancelTimer;
+
+  /// No description provided for @cancelTimerQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you want to cancel the sleep timer?'**
+  String get cancelTimerQuestion;
+
+  /// No description provided for @timerInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Timer active for {time}'**
+  String timerInfo(String time);
+
+  /// No description provided for @addTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Add time'**
+  String get addTime;
+
+  /// No description provided for @clearQueueTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Queue'**
+  String get clearQueueTitle;
+
+  /// No description provided for @clearQueueMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear all queued/pending downloads?'**
+  String get clearQueueMessage;
+
+  /// No description provided for @clearQueueDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'This will cancel all pending downloads. Completed downloads will not be affected.'**
+  String get clearQueueDescription;
+
+  /// No description provided for @downloadManagerSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'{active} active • {queued} queued'**
+  String downloadManagerSummary(int active, int queued);
+
+  /// No description provided for @downloadManagerRetryAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry all'**
+  String get downloadManagerRetryAll;
+
+  /// No description provided for @downloadManagerClearFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear failed'**
+  String get downloadManagerClearFailed;
+
+  /// No description provided for @downloadManagerClearCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear completed'**
+  String get downloadManagerClearCompleted;
+
+  /// No description provided for @clearCompletedDownloadsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear completed downloads'**
+  String get clearCompletedDownloadsTitle;
+
+  /// No description provided for @clearCompletedDownloadsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete all completed downloads?'**
+  String get clearCompletedDownloadsMessage;
+
+  /// No description provided for @clearCompletedDownloadsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'This will remove the downloaded files from storage. This action cannot be undone.'**
+  String get clearCompletedDownloadsDescription;
+
+  /// No description provided for @itemCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 item} other{{count} items}}'**
+  String itemCount(int count);
+
+  /// No description provided for @downloadCompletedFailedSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'{completed} completed • {failed} failed'**
+  String downloadCompletedFailedSummary(int completed, int failed);
+
+  /// No description provided for @downloadTotalEta.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated total time'**
+  String get downloadTotalEta;
+
+  /// No description provided for @downloadErrorResolveUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not resolve download URL'**
+  String get downloadErrorResolveUrl;
+
+  /// No description provided for @downloadErrorFileValidation.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloaded file validation failed'**
+  String get downloadErrorFileValidation;
+
+  /// No description provided for @downloadErrorUnexpectedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Unexpected download response'**
+  String get downloadErrorUnexpectedMessage;
+
+  /// No description provided for @clear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get clear;
+
+  /// No description provided for @queueTools.
+  ///
+  /// In en, this message translates to:
+  /// **'Queue Tools'**
+  String get queueTools;
+
+  /// No description provided for @queueToolsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Reorder your queue and create playlists'**
+  String get queueToolsDescription;
+
+  /// No description provided for @playlistCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Playlist created successfully'**
+  String get playlistCreated;
+
+  /// No description provided for @queue.
+  ///
+  /// In en, this message translates to:
+  /// **'Queue'**
+  String get queue;
+
+  /// No description provided for @tracksSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'tracks selected'**
+  String get tracksSelected;
+
+  /// No description provided for @selectAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Select All'**
+  String get selectAll;
+
+  /// No description provided for @deselectAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Deselect All'**
+  String get deselectAll;
+
+  /// No description provided for @updateDirectoryDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a new directory for this playlist'**
+  String get updateDirectoryDescription;
+
+  /// No description provided for @select.
+  ///
+  /// In en, this message translates to:
+  /// **'Select'**
+  String get select;
+
+  /// No description provided for @renameLocalFolder.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename folder'**
+  String get renameLocalFolder;
+
+  /// No description provided for @removeLocalFolder.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove folder'**
+  String get removeLocalFolder;
+
+  /// No description provided for @save.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get save;
+
+  /// No description provided for @localPlaylist.
+  ///
+  /// In en, this message translates to:
+  /// **'Local playlist'**
+  String get localPlaylist;
+
+  /// No description provided for @versionManager.
+  ///
+  /// In en, this message translates to:
+  /// **'Version Manager'**
+  String get versionManager;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
+  /// No description provided for @noReleasesFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No releases found'**
+  String get noReleasesFound;
+
+  /// No description provided for @version.
+  ///
+  /// In en, this message translates to:
+  /// **'Version'**
+  String get version;
+
+  /// No description provided for @alreadyInstalled.
+  ///
+  /// In en, this message translates to:
+  /// **'Already Installed'**
+  String get alreadyInstalled;
+
+  /// No description provided for @update.
+  ///
+  /// In en, this message translates to:
+  /// **'Update'**
+  String get update;
+
+  /// No description provided for @changelog.
+  ///
+  /// In en, this message translates to:
+  /// **'Changelog'**
+  String get changelog;
+
+  /// No description provided for @changelogNotAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Changelog not available'**
+  String get changelogNotAvailable;
+
+  /// No description provided for @later.
+  ///
+  /// In en, this message translates to:
+  /// **'Later'**
+  String get later;
+
+  /// No description provided for @updateAvailableDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'A new version of Musily is available. Update now to get the latest features and improvements.'**
+  String get updateAvailableDescription;
+
+  /// No description provided for @recommendations.
+  ///
+  /// In en, this message translates to:
+  /// **'Recommendations'**
+  String get recommendations;
+}
+
+class _AppLocalizationsDelegate
+    extends LocalizationsDelegate<AppLocalizations> {
+  const _AppLocalizationsDelegate();
+
+  @override
+  Future<AppLocalizations> load(Locale locale) {
+    return SynchronousFuture<AppLocalizations>(lookupAppLocalizations(locale));
+  }
+
+  @override
+  bool isSupported(Locale locale) => <String>[
+        'ar',
+        'de',
+        'en',
+        'es',
+        'fr',
+        'hi',
+        'id',
+        'it',
+        'ja',
+        'ko',
+        'pl',
+        'pt',
+        'ru',
+        'th',
+        'tr',
+        'uk',
+        'zh'
+      ].contains(locale.languageCode);
+
+  @override
+  bool shouldReload(_AppLocalizationsDelegate old) => false;
+}
+
+AppLocalizations lookupAppLocalizations(Locale locale) {
+  // Lookup logic when only language code is specified.
+  switch (locale.languageCode) {
+    case 'ar':
+      return AppLocalizationsAr();
+    case 'de':
+      return AppLocalizationsDe();
+    case 'en':
+      return AppLocalizationsEn();
+    case 'es':
+      return AppLocalizationsEs();
+    case 'fr':
+      return AppLocalizationsFr();
+    case 'hi':
+      return AppLocalizationsHi();
+    case 'id':
+      return AppLocalizationsId();
+    case 'it':
+      return AppLocalizationsIt();
+    case 'ja':
+      return AppLocalizationsJa();
+    case 'ko':
+      return AppLocalizationsKo();
+    case 'pl':
+      return AppLocalizationsPl();
+    case 'pt':
+      return AppLocalizationsPt();
+    case 'ru':
+      return AppLocalizationsRu();
+    case 'th':
+      return AppLocalizationsTh();
+    case 'tr':
+      return AppLocalizationsTr();
+    case 'uk':
+      return AppLocalizationsUk();
+    case 'zh':
+      return AppLocalizationsZh();
+  }
+
+  throw FlutterError(
+      'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+      'an issue with the localizations generation tool. Please file an issue '
+      'on GitHub with a reproducible sample app and the gen-l10n configuration '
+      'that was used.');
+}

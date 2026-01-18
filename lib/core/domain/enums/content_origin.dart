@@ -1,0 +1,4 @@
+enum ContentOrigin {
+  library,
+  dataFetch,
+}

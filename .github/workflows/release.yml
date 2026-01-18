@@ -1,0 +1,356 @@
+name: Build and Release Flutter App
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  metadata:
+    name: Get Metadata
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.extract_version.outputs.version }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Extract version
+        id: extract_version
+        run: |
+          version=$(chmod +x musily_metadata.sh && ./musily_metadata.sh --version)
+          echo "version=${version}" >> $GITHUB_OUTPUT
+
+  build:
+    name: Build
+    needs: metadata
+    strategy:
+      matrix:
+        os: [ubuntu-22.04, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+
+    env:
+      BUILD_DIR_LINUX: build/linux/x64/release/bundle
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Configure Git Safe Directory
+        run: |
+          git config --global --add safe.directory /__w/musily/musily
+          git config --global --add safe.directory /__w/musily/musily/musily_installer
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+          flutter-version: "3.29.3"
+
+      - name: Set up Java
+        if: matrix.os == 'ubuntu-22.04'
+        uses: actions/setup-java@v4
+        with:
+          distribution: "zulu"
+          java-version: "17.x"
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Install Linux dependencies
+        if: matrix.os == 'ubuntu-22.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            curl git unzip xz-utils zip \
+            clang cmake ninja-build pkg-config \
+            libgtk-3-dev liblzma-dev libglu1-mesa \
+            libstdc++-12-dev libmpv-dev \
+            libjsoncpp-dev libsecret-1-dev \
+            libayatana-appindicator3-dev xxd
+
+      - name: Build APK (Android)
+        if: matrix.os == 'ubuntu-22.04'
+        run: |
+          echo "${{ secrets.KEY_PROPERTIES_BASE64 }}" | base64 --decode > android/key.properties
+          echo "${{ secrets.KEY_STORE_BASE64 }}" | base64 --decode > android/app/key.jks
+          flutter build apk --release --flavor stable
+
+      - name: Build Linux
+        if: matrix.os == 'ubuntu-22.04'
+        run: flutter build linux --release
+
+      - name: Archive Linux build
+        if: matrix.os == 'ubuntu-22.04'
+        run: |
+          tar -czvf build/musily-linux-x64.tar.gz -C $BUILD_DIR_LINUX .
+
+      - name: Clean musily_installer/assets/app
+        if: matrix.os == 'ubuntu-22.04'
+        run: |
+          rm -rf musily_installer/assets/app/*
+          mkdir -p musily_installer/assets/app
+
+      - name: Build musily_installer (Uninstaller mode)
+        if: matrix.os == 'ubuntu-22.04'
+        working-directory: musily_installer
+        run: flutter build linux --release
+
+      - name: Copy uninstaller to musily/assets/uninstaller
+        if: matrix.os == 'ubuntu-22.04'
+        run: |
+          mkdir -p assets/uninstaller
+          tar -czvf assets/uninstaller/musily_installer.tar.gz -C musily_installer/build/linux/x64/release/bundle .
+
+      - name: Build Musily (with embedded uninstaller)
+        if: matrix.os == 'ubuntu-22.04'
+        run: flutter build linux --release
+
+      - name: Extract uninstaller from Musily build
+        if: matrix.os == 'ubuntu-22.04'
+        run: |
+          mkdir -p build/linux/x64/release/bundle/data/flutter_assets/assets/uninstaller/musily_installer
+          tar -xzf build/linux/x64/release/bundle/data/flutter_assets/assets/uninstaller/musily_installer.tar.gz -C build/linux/x64/release/bundle/data/flutter_assets/assets/uninstaller/musily_installer
+
+      - name: Copy musily build to musily_installer/assets/app
+        if: matrix.os == 'ubuntu-22.04'
+        run: |
+          rm -rf musily_installer/assets/app/*
+          cp LICENSE musily_installer/assets/app
+          echo ${{ needs.metadata.outputs.version }} > musily_installer/assets/app/version.txt
+          tar -czvf musily_installer/assets/app/musily.tar.gz -C build/linux/x64/release/bundle .
+
+      - name: Rebuild musily_installer (Installer mode)
+        if: matrix.os == 'ubuntu-22.04'
+        working-directory: musily_installer
+        run: flutter build linux --release
+
+      - name: Create .run installer
+        if: matrix.os == 'ubuntu-22.04'
+        run: |
+          chmod +x musily_installer/builder.sh
+          cd musily_installer
+          ./builder.sh
+
+      - name: Prepare executable .run installer for distribution
+        if: matrix.os == 'ubuntu-22.04'
+        run: |
+          # Make the .run file executable
+          chmod +x musily_installer/output/musily_installer.run
+
+          # Create a zip with the executable .run file
+          mkdir -p build/zip
+          cp musily_installer/output/musily_installer.run build/zip/musily-installer-${{ needs.metadata.outputs.version }}.run
+          cd build/zip
+          zip -r ../musily-linux-installer-${{ needs.metadata.outputs.version }}.zip *.run
+          cd ../..
+
+          # Clean up temp directory
+          rm -rf build/zip
+
+      - name: Build Windows
+        if: matrix.os == 'windows-latest'
+        run: flutter build windows --release
+
+      - name: Set up Python
+        if: matrix.os == 'windows-latest'
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install Inno Setup
+        if: matrix.os == 'windows-latest'
+        run: choco install innosetup --yes
+
+      - name: Create iss File
+        if: matrix.os == 'windows-latest'
+        run: |
+          dart run create_iss_file.dart --version "${{ needs.metadata.outputs.version }}"
+
+      - name: Generate Windows Installer with Inno Setup
+        if: matrix.os == 'windows-latest'
+        run: |
+          iscc musily_installer.iss
+
+      - name: Move installer to build folder
+        if: matrix.os == 'windows-latest'
+        run: |
+          mv Output/musily-installer.exe build/musily-windows-installer.exe
+
+      - name: Build macOS
+        if: matrix.os == 'macos-latest'
+        run: flutter build macos --release
+
+      - name: Archive macOS build
+        if: matrix.os == 'macos-latest'
+        run: |
+          ditto -c -k --sequesterRsrc --keepParent build/macos/Build/Products/Release/musily.app build/musily-macos-x64.zip
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Flutter-Build-${{ matrix.os }}
+          path: |
+            build/*.zip
+            build/*.exe
+            musily_installer/**/*.zip
+            build/*.tar.gz
+            build/app/outputs/flutter-apk/*.apk
+
+  release_binaries:
+    name: Release Binaries
+    needs: [metadata, build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Extract description
+        id: extract_description
+        run: |
+          description=$(chmod +x musily_metadata.sh && ./musily_metadata.sh --description)
+          escaped_description="${description//'%'/'%25'}"
+          escaped_description="${escaped_description//$'\n'/'%0A'}"
+          escaped_description="${escaped_description//$'\r'/'%0D'}"
+          echo "description=${escaped_description}" >> $GITHUB_OUTPUT
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+
+      - name: Rename APK file
+        run: |
+          apk_path=$(find dist -name "*.apk" | head -n 1)
+          new_apk_name="musily-${{ needs.metadata.outputs.version }}.apk"
+          mv "$apk_path" "dist/$new_apk_name"
+        shell: bash
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: false
+          tag_name: ${{ needs.metadata.outputs.version }}
+          name: Release ${{ needs.metadata.outputs.version }}
+          body: "${{ steps.extract_description.outputs.description }}"
+          files: |
+            dist/**/*.zip
+            dist/**/*.tar.gz
+            dist/**/*.exe
+            dist/**/*.run
+            dist/musily-${{ needs.metadata.outputs.version }}.apk
+
+  publish_on_telegram:
+    name: Publish on Telegram
+    needs: [release_binaries]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set Up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+          flutter-version: "3.29.3"
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Send Release Notification to Telegram
+        run: |
+          dart run send_telegram_message.dart \
+            --token "${{ secrets.TELEGRAM_BOT_TOKEN }}" \
+            --chat "${{ secrets.TELEGRAM_CHAT_ID }}"
+
+  flatpak:
+    name: Build Flatpak
+    needs: [metadata, release_binaries, publish_on_telegram]
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/flathub-infra/flatpak-github-actions:gnome-48
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Configure Git Safe Directory
+        run: |
+          git config --global --add safe.directory /__w/musily/musily
+          git config --global --add safe.directory /__w/musily/musily/flathub
+      - name: Initialize and Update Submodules
+        run: |
+          git submodule update --init --recursive
+      - name: Download Linux Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: Flutter-Build-ubuntu-22.04
+          path: dist
+      - name: Calculate SHA256 and Update musily.json
+        run: |
+          cd flathub
+          TAR_FILE=$(find ../dist -name "*.tar.gz")
+          SHA256=$(sha256sum "$TAR_FILE" | awk '{print $1}')
+          VERSION="${{ needs.metadata.outputs.version }}"
+          URL="https://github.com/${{ github.repository }}/releases/download/${VERSION}/musily-linux-x64.tar.gz"
+
+          cat > modules/musily.json << EOF
+          {
+            "name": "Musily",
+            "buildsystem": "simple",
+            "only-arches": [
+              "x86_64"
+            ],
+            "build-commands": [
+              "./setup_musily.sh"
+            ],
+            "sources": [
+              {
+                "type": "dir",
+                "path": "../assets"
+              },
+              {
+                "type": "archive",
+                "url": "${URL}",
+                "sha256": "${SHA256}"
+              }
+            ]
+          }
+          EOF
+
+          cat modules/musily.json
+      - uses: flatpak/flatpak-github-actions/flatpak-builder@v6
+        with:
+          bundle: app.musily.music.flatpak
+          manifest-path: flathub/app.musily.music.json
+          cache-key: flatpak-builder-${{ github.sha }}
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Flutter-Build-Flatpak
+          path: |
+            **/*.flatpak
+
+  release_flatpak:
+    name: Release Flatpak
+    needs: [metadata, flatpak]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Flatpak Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: Flutter-Build-Flatpak
+          path: dist
+      - name: Add Flatpak to Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/**/*.flatpak
+          tag_name: ${{ needs.metadata.outputs.version }}

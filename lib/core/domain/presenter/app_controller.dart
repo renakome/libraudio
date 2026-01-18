@@ -1,0 +1,155 @@
+import 'dart:async';
+import 'dart:developer';
+
+import 'package:flutter/material.dart';
+import 'package:musily/core/domain/errors/musily_error.dart';
+import 'package:musily/core/presenter/extensions/musily_error.dart';
+import 'package:musily/core/presenter/ui/buttons/ly_filled_button.dart';
+import 'package:musily/core/presenter/ui/utils/ly_snackbar.dart';
+import 'package:musily/core/presenter/ui/utils/ly_navigator.dart';
+import 'package:musily/core/presenter/widgets/app_builder.dart';
+
+abstract class BaseControllerData {
+  copyWith();
+}
+
+abstract class BaseController<Data extends BaseControllerData, Methods> {
+  final _dataStreamController = StreamController<Data>.broadcast();
+  final _eventStreamController =
+      StreamController<BaseControllerEvent>.broadcast();
+
+  late Data data;
+  late BaseControllerEvent event;
+  late Methods methods;
+  final List<BaseControllerEvent> events;
+
+  Data defineData();
+  Methods defineMethods();
+  void updateData(Data data) {
+    this.data = data;
+    if (!_dataStreamController.isClosed) {
+      _dataStreamController.add(data);
+    }
+  }
+
+  void dispatchEvent(BaseControllerEvent event) {
+    this.event = event;
+    onEventDispatched(event);
+    if (event.streamController != null) {
+      event.streamController!.add(event);
+    }
+    _eventStreamController.add(event);
+  }
+
+  void catchError(dynamic error) {
+    if (error is MusilyError) {
+      LySnackbar.showError(error.message);
+      log('error: $error', stackTrace: error.stackTrace);
+    }
+  }
+
+  AppBuilder<Data, BaseControllerEvent> builder({
+    required Widget Function(BuildContext context, Data data) builder,
+    void Function(BuildContext context, BaseControllerEvent event, Data data)?
+        eventListener,
+    bool allowAlertDialog = false,
+  }) {
+    return AppBuilder(
+      streams: [
+        _dataStreamController.stream,
+        _eventStreamController.stream,
+      ],
+      initialData: data,
+      listener: (context, data) {
+        final currentEvent = event;
+        final currentData = this.data;
+
+        if (currentEvent.id == 'catch_error' && allowAlertDialog) {
+          if (currentEvent.data is MusilyError) {
+            LyNavigator.showLyCardDialog(
+              context: context,
+              actions: (context) => [
+                LyFilledButton(
+                  onPressed: () {
+                    dispatchEvent(
+                      BaseControllerEvent(
+                        data: 'errorDone',
+                      ),
+                    );
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Ok'),
+                )
+              ],
+              title: Text(
+                MusilyError.getErrorStringById(
+                  (currentEvent.data as MusilyError).id,
+                ),
+              ),
+              builder: (context) => const SizedBox.shrink(),
+            );
+          }
+        }
+        return eventListener?.call(context, currentEvent, currentData);
+      },
+      builder: (context, data) {
+        final latestData = this.data;
+        return builder(context, latestData);
+      },
+    );
+  }
+
+  List<StreamSubscription> subscriptions = [];
+
+  BaseController({this.events = const []}) {
+    data = defineData();
+    methods = defineMethods();
+    event = BaseControllerEvent(id: 'initialEvent', data: data);
+
+    for (final event in events) {
+      if (event.streamController != null) {
+        subscriptions.add(event.streamController!.stream.listen((e) {
+          onEventDispatched(e);
+        }));
+      }
+    }
+  }
+
+  void onEventDispatched(BaseControllerEvent event) {}
+
+  void dispose() {
+    _dataStreamController.close();
+    _eventStreamController.close();
+    for (final sub in subscriptions) {
+      sub.cancel();
+    }
+  }
+}
+
+class BaseControllerEvent<D> {
+  String id;
+  D data;
+  StreamController? streamController;
+
+  BaseControllerEvent({this.id = '', required this.data});
+
+  BaseControllerEvent<D> copyWith({
+    String? id,
+    D? data,
+  }) {
+    return BaseControllerEvent<D>(
+      id: id ?? this.id,
+      data: data ?? this.data,
+    );
+  }
+
+  void listen() {
+    streamController ??= StreamController<D>();
+  }
+
+  void dispose() {
+    if (streamController != null) {
+      streamController!.close();
+    }
+  }
+}

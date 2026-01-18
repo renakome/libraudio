@@ -1,0 +1,189 @@
+# Project Metadata
+name: musily
+description: "A great music app."
+publish_to: "none" # Set to 'none' to prevent publishing to pub.dev
+version: 5.0.1
+
+# Flutter SDK Environment
+environment:
+  sdk: ">=3.6.2 <4.0.0"
+
+# Dependencies
+dependencies:
+  # Core Flutter dependencies
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.6
+
+  # Modularization and Routing
+  flutter_modular: ^6.3.4
+
+  # Networking
+  http: ^1.2.1
+  dio: ^5.5.0+1
+
+  # YouTube APIs
+  youtube_explode_dart:
+    git:
+      url: https://github.com/Hexer10/youtube_explode_dart.git
+      ref: 78d716afa9bccd117020a1983361ebf4fffaaf28
+  dart_ytmusic_api:
+    git: https://github.com/MusilyApp/dart_ytmusic_api
+
+  # UI and Animations
+  skeletonizer: any
+  dotted_border: ^2.1.0
+  flutter_svg: ^2.0.10+1
+  percent_indicator: ^4.2.3
+  responsive_breakpoint:
+    git:
+      url: https://github.com/strawti-apps/responsive_breakpoint.git
+
+  # Data Storage and Caching
+  isar: ^3.1.0+1
+  isar_flutter_libs: ^3.1.0+1
+  path_provider: ^2.1.3
+  shared_preferences: ^2.3.2
+  cached_network_image: ^3.4.1
+  # flutter_secure_storage: ^9.2.2
+  uuid: ^4.4.2
+  path: ^1.9.0
+
+  # Audio and Media Handling
+  audio_service: ^0.18.15
+  audio_service_mpris: ^0.1.5
+  just_audio: ^0.9.39
+  just_audio_media_kit:
+    git:
+      url: https://github.com/MusilyApp/just_audio_media_kit.git
+  audio_session: ^0.1.21
+  media_kit: ^1.2.3
+  media_kit_libs_linux: any
+  media_kit_libs_windows_audio: any
+  media_kit_libs_android_audio: any
+  media_kit_libs_audio: ^1.0.4
+
+  # Localization
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.20.2
+
+  # Permissions and App Links
+  permission_handler: ^11.3.1
+  app_links: 6.4.0
+  url_launcher: ^6.3.0
+
+  # Other Useful Packages
+  simple_icons: ^10.1.3
+  queue: ^3.1.0+2
+  crypto: ^3.0.3
+  flutter_download_manager: ^0.5.5
+  share_plus: ^10.1.2
+  archive: ^3.6.1
+  device_info_plus: ^11.1.1
+  media_store_plus: ^0.1.3
+  receive_sharing_intent: ^1.8.1
+  file_picker: ^8.1.4
+  tray_manager: ^0.4.0
+  window_manager: any
+  dynamic_color:
+    git:
+      url: https://github.com/MusilyApp/flutter-packages.git
+      path: packages/dynamic_color
+  process_run: ^0.14.2
+  dart_ipc: ^1.0.0
+  package_info_plus: ^8.3.0
+  flutter_curl: ^0.7.0
+  markdown_widget: ^2.3.2+8
+  internet_connection_checker_plus: ^2.9.1
+  gtk_window: ^0.1.1
+  lucide_icons_flutter: ^3.1.5
+  toastification: ^3.0.3
+  audio_service_win: ^0.0.2
+  collection: ^1.19.1
+  audio_metadata_reader: ^1.4.2
+
+# Development Dependencies
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  isar_generator: ^3.1.0+1
+  build_runner: ^2.4.13
+  flutter_launcher_icons: ^0.14.4
+  flutter_native_splash: ^2.4.4
+  args: ^2.7.0
+
+# Flutter Configuration
+flutter:
+  uses-material-design: true
+  generate: true
+
+  # Asset Configuration
+  fonts:
+    - family: ElmsSans
+      fonts:
+        - asset: assets/fonts/Elms_Sans/static/ElmsSans-Thin.ttf
+          weight: 100
+        - asset: assets/fonts/Elms_Sans/static/ElmsSans-ThinItalic.ttf
+          weight: 100
+          style: italic
+        - asset: assets/fonts/Elms_Sans/static/ElmsSans-ExtraLight.ttf
+          weight: 200
+        - asset: assets/fonts/Elms_Sans/static/ElmsSans-ExtraLightItalic.ttf
+          weight: 200
+          style: italic
+        - asset: assets/fonts/Elms_Sans/static/ElmsSans-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Elms_Sans/static/ElmsSans-LightItalic.ttf
+          weight: 300
+          style: italic
+        - asset: assets/fonts/Elms_Sans/static/ElmsSans-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Elms_Sans/static/ElmsSans-Italic.ttf
+          weight: 400
+          style: italic
+        - asset: assets/fonts/Elms_Sans/static/ElmsSans-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Elms_Sans/static/ElmsSans-MediumItalic.ttf
+          weight: 500
+          style: italic
+        - asset: assets/fonts/Elms_Sans/static/ElmsSans-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Elms_Sans/static/ElmsSans-SemiBoldItalic.ttf
+          weight: 600
+          style: italic
+        - asset: assets/fonts/Elms_Sans/static/ElmsSans-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Elms_Sans/static/ElmsSans-BoldItalic.ttf
+          weight: 700
+          style: italic
+        - asset: assets/fonts/Elms_Sans/static/ElmsSans-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/Elms_Sans/static/ElmsSans-ExtraBoldItalic.ttf
+          weight: 800
+          style: italic
+        - asset: assets/fonts/Elms_Sans/static/ElmsSans-Black.ttf
+          weight: 900
+        - asset: assets/fonts/Elms_Sans/static/ElmsSans-BlackItalic.ttf
+          weight: 900
+          style: italic
+  assets:
+    - assets/icons/
+    - assets/icons/tray/
+    - assets/uninstaller/
+    - assets/audio/
+    - assets/supporters.json
+    - assets/images/
+
+# Splash Screen Configuration
+flutter_native_splash:
+  color: "#ffffff"
+  image: assets/icons/ic_launcher_foreground.png
+  color_dark: "#151218"
+  image_dark: assets/icons/ic_launcher_foreground_dev.png
+  android_12:
+    image: assets/icons/ic_launcher_foreground.png
+    icon_background_color: "#ffffff"
+    image_dark: assets/icons/ic_launcher_foreground_dev.png
+    icon_background_color_dark: "#151218"
