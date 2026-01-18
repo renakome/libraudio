@@ -1,3 +1,9 @@
+## 5.0.2
+
+**Verbesserungen**
+
+- Stärker optimiert im Vergleich zu Musily und behebt Fehler.
+
 ## 5.0.1
 
 **Fehlerbehebungen**
