@@ -1,3 +1,9 @@
+## 5.0.2
+
+**İyileştirmeler**
+
+- Musily'e kıyasla daha optimize ve hataları giderir.
+
 ## 5.0.1
 
 **Düzeltmeler**
