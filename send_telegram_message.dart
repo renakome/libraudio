@@ -99,7 +99,7 @@ Future<void> sendTelegramMessage({
   print(escapeMarkdownV2(changelog).replaceAll('\\*\\*', '\\*'));
 
   String text = """
-*Musily Update\\!*
+*Libraudio Update\\!*
 
 *Version:* ${escapeMarkdownV2(version)}
 
