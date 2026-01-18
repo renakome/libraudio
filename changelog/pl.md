@@ -1,3 +1,9 @@
+## 5.0.2
+
+**Ulepszenia**
+
+- Bardziej zoptymalizowany w porównaniu z Musily i naprawia błędy.
+
 ## 5.0.1
 
 **Poprawki**

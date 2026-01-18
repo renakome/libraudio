@@ -45,8 +45,16 @@ jobs:
 
       - name: Configure Git Safe Directory
         run: |
-          git config --global --add safe.directory /__w/musily/musily
-          git config --global --add safe.directory /__w/musily/musily/musily_installer
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git config --global --add safe.directory "$GITHUB_WORKSPACE/musily_installer"
+
+      - name: Verify musily_installer submodule
+        if: matrix.os == 'ubuntu-22.04'
+        run: |
+          if [ ! -f musily_installer/pubspec.yaml ]; then
+            echo "::error::musily_installer submodule not found. Ensure submodules are checked out and accessible."
+            exit 1
+          fi
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
