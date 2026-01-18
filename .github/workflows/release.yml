@@ -225,6 +225,7 @@ jobs:
           path: |
             build/*.zip
             build/*.exe
+            build/*.apk
             musily_installer/**/*.zip
             build/*.tar.gz
             build/app/outputs/flutter-apk/*.apk
@@ -256,7 +257,12 @@ jobs:
           target="dist/libraudio-${{ needs.metadata.outputs.version }}.apk"
           if [ ! -f "$target" ]; then
             apk_path=$(find dist -name "*.apk" | head -n 1)
-            mv "$apk_path" "$target"
+            if [ -n "$apk_path" ] && [ -f "$apk_path" ]; then
+              mv "$apk_path" "$target"
+            else
+              echo "No APK found under dist to rename." >&2
+              exit 1
+            fi
           fi
         shell: bash
 
