@@ -99,3 +99,6 @@ temp-musily-original/
 # Development artifacts
 .DS_Store
 Thumbs.db
+
+# Temporary base64 files (remove after setting GitHub secrets)
+*.b64
