@@ -87,10 +87,12 @@ class _LyDropdownButtonState<T> extends State<LyDropdownButton<T>> {
                           .withValues(alpha: 0.9),
                 ),
               ),
-            ),
+          ),
           DropdownButtonFormField<T>(
             focusNode: focusNode,
-            initialValue: widget.value,
+            // Using `value` for compatibility with Flutter versions that don't expose `initialValue`.
+            // ignore: deprecated_member_use
+            value: widget.value,
             onChanged: widget.enabled ? widget.onChanged : null,
             hint: widget.hint,
             items: widget.items,
