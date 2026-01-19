@@ -94,9 +94,6 @@ android {
             buildConfigField "boolean", "ENABLE_AUDIO_OPTIMIZATIONS", "true"
             buildConfigField "boolean", "ENABLE_CACHE_OPTIMIZATIONS", "true"
 
-            // Enable R8 full mode for better optimization
-            android.buildTypes.release.ndk.debuggable = false
-
             signingConfig signingConfigs.stable
         }
         debug {
