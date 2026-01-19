@@ -39,10 +39,194 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+        // Enable incremental compilation for faster builds
+        incremental = true
     }
 
     kotlinOptions {
         jvmTarget = "17"
+        // Enable Kotlin incremental compilation
+        incremental = true
+        // Enable experimental features for better performance
+        freeCompilerArgs += ["-Xjvm-default=all"]
+    }
+
+    defaultConfig {
+        applicationId = 'app.libraudio.music'
+        minSdk = flutter.minSdkVersion
+        targetSdk = flutter.targetSdkVersion
+        versionCode = flutterVersionCode.toInteger()
+        versionName = flutterVersionName
+
+        // Optimize for modern Android devices (arm64-v8a first for better performance)
+        ndk {
+            abiFilters 'arm64-v8a', 'armeabi-v7a', 'x86_64'
+        }
+    }
+
+    buildFeatures {
+        buildConfig = true
+    }
+
+    signingConfigs {
+        // Usa keystore de release se existir; caso contrário, cai para o debug keystore
+        if (keystorePropertiesFile.exists()) {
+            stable {
+                storeFile = file(keystoreProperties['stableStoreFile'])
+                storePassword = keystoreProperties['stableStorePassword']
+                keyAlias = keystoreProperties['stableKeyAlias']
+                keyPassword = keystoreProperties['stableKeyPassword']
+            }
+        } else {
+            stable {
+                initWith signingConfigs.debug
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            // Aggressive optimizations for Android release builds
+            shrinkResources = true
+            minifyEnabled = true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard.cfg'
+
+            // Platform-specific optimizations
+            buildConfigField "boolean", "ENABLE_PLATFORM_OPTIMIZATIONS", "true"
+            buildConfigField "boolean", "ENABLE_AUDIO_OPTIMIZATIONS", "true"
+            buildConfigField "boolean", "ENABLE_CACHE_OPTIMIZATIONS", "true"
+
+            // Enable R8 full mode for better optimization
+            android.buildTypes.release.ndk.debuggable = false
+
+            signingConfig signingConfigs.stable
+        }
+        debug {
+            // Debug optimizations
+            buildConfigField "boolean", "ENABLE_PLATFORM_OPTIMIZATIONS", "false"
+            buildConfigField "boolean", "ENABLE_AUDIO_OPTIMIZATIONS", "false"
+            buildConfigField "boolean", "ENABLE_CACHE_OPTIMIZATIONS", "false"
+
+            // Enable debug features
+            debuggable = true
+        }
+    }
+
+    productFlavors {
+        dev {
+            dimension 'default'
+            resValue 'string', 'app_name', 'Libraudio Dev'
+            applicationId 'app.libraudio.music.dev'
+            applicationIdSuffix '.dev'
+            manifestPlaceholders = [
+                appIcon: '@mipmap/launcher_icon_dev',
+            ]
+        }
+        stable {
+            dimension 'default'
+            resValue 'string', 'app_name', 'Libraudio'
+            manifestPlaceholders = [
+                appIcon: '@mipmap/launcher_icon',
+            ]
+            signingConfig signingConfigs.stable
+        }
+    }
+}
+
+flutter {
+    source = '../..'
+}
+
+subprojects {
+    afterEvaluate { project ->
+        if (project.hasProperty('android')) {
+            android {
+                compileSdkVersion 35
+
+                compileOptions {
+                    sourceCompatibility JavaVersion.VERSION_17
+                    targetCompatibility JavaVersion.VERSION_17
+                }
+            }
+        }
+        
+        tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+            kotlinOptions {
+                jvmTarget = JavaVersion.VERSION_17.toString()
+            }
+        }
+
+        if (project.plugins.hasPlugin('com.android.library')) {
+            android {
+                defaultConfig {
+                    def androidManifest = android.sourceSets.main.manifest.srcFile
+                    if (androidManifest.exists()) {
+                        def parsedManifest = new XmlParser().parse(androidManifest)
+                        def packageName = parsedManifest.attribute('package')
+
+                        if (packageName == null) {
+                            namespace = "app.libraudio.music"
+                        }
+
+                        if (namespace == null) {
+                            namespace project.group
+                        }
+                    }
+                }
+            }
+        }
+    }
+    project.evaluationDependsOn(':app')
+}
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'dev.flutter.flutter-gradle-plugin'
+}
+
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader('UTF-8') { reader ->
+        localProperties.load(reader)
+    }
+}
+
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file('key.properties')
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+
+def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
+if (flutterVersionCode == null) {
+    flutterVersionCode = '1'
+}
+
+def flutterVersionName = localProperties.getProperty('flutter.versionName')
+if (flutterVersionName == null) {
+    flutterVersionName = '1.0'
+}
+
+android {
+    namespace = 'app.libraudio.music'
+    // Override compileSdk to align with dependencies (browser/core-ktx 1.17.0)
+    compileSdk = 36
+    ndkVersion = '27.0.12077973'
+    flavorDimensions 'default'
+
+    // Platform-optimized compile options
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+        // Enable incremental compilation for faster builds
+        incremental = true
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
+        // Enable Kotlin incremental compilation
+        incremental = true
         // Enable experimental features for better performance
         freeCompilerArgs += ["-Xjvm-default=all"]
     }
