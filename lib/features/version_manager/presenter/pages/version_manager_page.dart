@@ -197,7 +197,7 @@ class _AppHeader extends StatelessWidget {
         ),
         const SizedBox(height: 4),
         Text(
-          'by Felipe Yslaoker',
+          'by Renako',
           style: context.themeData.textTheme.bodyLarge?.copyWith(
             color:
                 context.themeData.colorScheme.onSurface.withValues(alpha: 0.7),

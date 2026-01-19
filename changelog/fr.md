@@ -1,4 +1,26 @@
-## 5.0.2
+## 5.0.3 "dev"
+
+**Optimisations de Performance**
+
+- Optimisations spécifiques à la plateforme pour Android, iOS et desktop
+- Gestionnaire de cache intelligent avec cache mémoire LRU et cache disque optimisé par plateforme
+- Widgets ListView optimisés avec configurations spécifiques à la plateforme pour de meilleures performances de défilement
+- Chargement conditionnel des bibliothèques pour réduire la taille de l'APK et l'overhead d'initialisation
+- Configuration améliorée du service audio basée sur les capacités de la plateforme
+- Optimisations de compilation améliorées avec mode R8 complet et priorisation ABI
+
+**Améliorations**
+
+- Bouton des supporters supprimé ; À propos est contrôlé par le code
+- Les boutons de confidentialité effacent/arrêtent maintenant l'historique et appliquent le blocage de capture d'écran sur Android
+- Les contrôles de taille du cache de stockage mettent immédiatement à jour les limites du cache
+- Nettoyage des étiquettes de langue des paramètres et suivi de l'historique dans recherche/lecteur
+- Implémentation du chargement lazy pour une meilleure gestion de la mémoire
+- Configurations UI optimisées par plateforme (Edge-to-Edge sur Android, etc.)
+- Stratégies de cache améliorées avec nettoyage automatique et limites de taille
+- Meilleure gestion des ressources entre différentes plateformes
+
+## 5.0.2 "dev"
 
 **Améliorations**
 
@@ -277,4 +299,11 @@ Note : La bibliothèque locale et la bibliothèque Musily sont gérées séparé
 ## 1.0.0
 
 - Version initiale.
+
+
+## 5.0.3 updates
+- Removed in-app supporters toggle; About is code-controlled now
+- Privacy toggles now clear/stop history and disable screenshot on Android
+- Storage cache size controls now apply immediately to caching limits
+- Cleaned settings language labels and history tracking in search/player
 

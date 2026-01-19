@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:musily/core/domain/usecases/get_playable_item_usecase.dart';
 import 'package:musily/core/presenter/controllers/core/core_controller.dart';
 import 'package:musily/core/presenter/routers/downup_router.dart';
@@ -19,6 +20,8 @@ import 'package:musily/features/artist/domain/usecases/get_artist_usecase.dart';
 import 'package:musily/features/downloader/presenter/controllers/downloader/downloader_controller.dart';
 import 'package:musily/features/player/presenter/controllers/player/player_controller.dart';
 import 'package:musily/core/presenter/extensions/build_context.dart';
+import 'package:musily/features/settings/data/privacy_service.dart';
+import 'package:musily/features/settings/presenter/controllers/settings/settings_controller.dart';
 import 'package:musily/features/playlist/domain/usecases/get_playlist_usecase.dart';
 import 'package:musily/features/track/domain/usecases/get_track_usecase.dart';
 
@@ -64,6 +67,13 @@ class _SearchPageState extends State<SearchPage> {
   final FocusNode searchFocusNode = FocusNode();
   List<String> searchSuggestions = [];
   Timer? debounce;
+  late final SettingsController settingsController;
+
+  @override
+  void initState() {
+    super.initState();
+    settingsController = Modular.get<SettingsController>();
+  }
 
   @override
   void dispose() {
@@ -101,7 +111,14 @@ class _SearchPageState extends State<SearchPage> {
     if (value.isEmpty) {
       return;
     }
-    final action = await Navigator.of(context).push(
+    await PrivacyService.addSearchQuery(
+      value,
+      enabled: !settingsController.data.pauseSearchHistory,
+    );
+    // ignore: use_build_context_synchronously
+    final navigator = Navigator.of(context);
+    // ignore: use_build_context_synchronously
+    final action = await navigator.push(
       DownupRouter(
         builder: (context) => ResultsPage(
           getTrackUsecase: widget.getTrackUsecase,
@@ -121,6 +138,7 @@ class _SearchPageState extends State<SearchPage> {
         ),
       ),
     );
+    if (!mounted) return;
     if (action == 'edit') {
       searchFocusNode.requestFocus();
     }

@@ -7,6 +7,7 @@ import 'package:musily/core/presenter/ui/text_fields/ly_text_field.dart';
 import 'package:musily/core/presenter/ui/utils/ly_page.dart';
 import 'package:musily/core/presenter/widgets/empty_state.dart';
 import 'package:musily/core/presenter/widgets/musily_app_bar.dart';
+import 'package:musily/core/presenter/widgets/optimized_list_view.dart';
 import 'package:musily/core/presenter/widgets/player_sized_box.dart';
 import 'package:musily/features/_library_module/presenter/controllers/library/library_controller.dart';
 import 'package:musily/features/_search_module/presenter/controllers/results_page/results_page_controller.dart';
@@ -155,7 +156,7 @@ class _ResultsPageState extends State<ResultsPage> {
               );
             }
 
-            return ListView(
+            return OptimizedListView(
               children: [
                 if (hasArtists || isSearching) ...[
                   Padding(
@@ -186,7 +187,7 @@ class _ResultsPageState extends State<ResultsPage> {
                     height: 170,
                     child: Skeletonizer(
                       enabled: isSearching,
-                      child: ListView.separated(
+                      child: OptimizedListViewBuilder(
                         scrollDirection: Axis.horizontal,
                         padding: const EdgeInsets.symmetric(
                           horizontal: 16,

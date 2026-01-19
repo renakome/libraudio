@@ -73,77 +73,26 @@ class _AppSectionState extends State<AppSection> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                LyDropdownButton(
+                                LyDropdownButton(
                   density: LyDensity.dense,
                   items: const [
-                    DropdownMenuItem(
-                      value: 'en',
-                      child: Text('English'),
-                    ),
-                    DropdownMenuItem(
-                      value: 'pt',
-                      child: Text('Português'),
-                    ),
-                    DropdownMenuItem(
-                      value: 'ru',
-                      child: Text('Русский'),
-                    ),
-                    DropdownMenuItem(
-                      value: 'es',
-                      child: Text('Español'),
-                    ),
-                    DropdownMenuItem(
-                      value: 'uk',
-                      child: Text('Українська'),
-                    ),
-                    DropdownMenuItem(
-                      value: 'fr',
-                      child: Text('Français'),
-                    ),
-                    DropdownMenuItem(
-                      value: 'it',
-                      child: Text('Italiano'),
-                    ),
-                    DropdownMenuItem(
-                      value: 'de',
-                      child: Text('Deutsch'),
-                    ),
-                    DropdownMenuItem(
-                      value: 'ja',
-                      child: Text('日本語'),
-                    ),
-                    DropdownMenuItem(
-                      value: 'zh',
-                      child: Text('中文'),
-                    ),
-                    DropdownMenuItem(
-                      value: 'ko',
-                      child: Text('한국어'),
-                    ),
-                    DropdownMenuItem(
-                      value: 'hi',
-                      child: Text('हिन्दी'),
-                    ),
-                    DropdownMenuItem(
-                      value: 'id',
-                      child: Text('Bahasa Indonesia'),
-                    ),
-                    DropdownMenuItem(
-                      value: 'tr',
-                      child: Text('Türkçe'),
-                    ),
-                    DropdownMenuItem(
-                      value: 'ar',
-                      child: Text('العربية'),
-                    ),
-                    DropdownMenuItem(
-                      value: 'pl',
-                      child: Text('Polski'),
-                    ),
-                    DropdownMenuItem(
-                      value: 'th',
-                      child: Text('ไทย'),
-                    ),
+                    DropdownMenuItem(value: 'en', child: Text('English')),
+                    DropdownMenuItem(value: 'pt', child: Text('Portuguese')),
+                    DropdownMenuItem(value: 'ru', child: Text('Russian')),
+                    DropdownMenuItem(value: 'es', child: Text('Spanish')),
+                    DropdownMenuItem(value: 'uk', child: Text('Ukrainian')),
+                    DropdownMenuItem(value: 'fr', child: Text('French')),
+                    DropdownMenuItem(value: 'it', child: Text('Italian')),
+                    DropdownMenuItem(value: 'de', child: Text('German')),
+                    DropdownMenuItem(value: 'ja', child: Text('Japanese')),
+                    DropdownMenuItem(value: 'zh', child: Text('Chinese')),
+                    DropdownMenuItem(value: 'ko', child: Text('Korean')),
+                    DropdownMenuItem(value: 'hi', child: Text('Hindi')),
+                    DropdownMenuItem(value: 'id', child: Text('Indonesian')),
+                    DropdownMenuItem(value: 'tr', child: Text('Turkish')),
+                    DropdownMenuItem(value: 'ar', child: Text('Arabic')),
+                    DropdownMenuItem(value: 'pl', child: Text('Polish')),
+                    DropdownMenuItem(value: 'th', child: Text('Thai')),
                   ],
                   value: data.locale?.languageCode,
                   onChanged: (value) {

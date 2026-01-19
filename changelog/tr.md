@@ -1,4 +1,26 @@
-## 5.0.2
+## 5.0.3 "dev"
+
+**Performans Optimizasyonları**
+
+- Android, iOS ve masaüstü platformları için platforma özel optimizasyonlar
+- LRU bellek önbelleği ve platforma optimize edilmiş disk önbelleği ile akıllı önbellek yöneticisi
+- Daha iyi kaydırma performansı için platforma özel konfigürasyonlara sahip optimize edilmiş ListView widget'ları
+- APK boyutunu ve başlatma yükünü azaltmak için koşullu kütüphane yükleme
+- Platform yeteneklerine dayalı geliştirilmiş ses servisi konfigürasyonu
+- Tam R8 modu ve ABI önceliklendirmesi ile geliştirilmiş yapı optimizasyonları
+
+**İyileştirmeler**
+
+- Destekçi geçişi kaldırıldı; Hakkında artık kodla kontrol ediliyor
+- Gizlilik geçişleri artık geçmişi temizliyor/durduruyor ve Android'de ekran görüntüsü engellemesini uyguluyor
+- Depolama önbelleği boyutu kontrolleri önbellek limitlerini anında güncelliyor
+- Ayarlar dil etiketlerinin temizlenmesi ve arama/oynatıcıda geçmiş takibi
+- Daha iyi bellek yönetimi için tembel yükleme uygulaması
+- Platforma optimize edilmiş UI konfigürasyonları (Android'de Edge-to-Edge vb.)
+- Otomatik temizleme ve boyut limitlerine sahip geliştirilmiş önbellek stratejileri
+- Farklı platformlar arasında daha iyi kaynak yönetimi
+
+## 5.0.2 "dev"
 
 **İyileştirmeler**
 
@@ -277,4 +299,11 @@ Not: Yerel kütüphane ve Musily kütüphanesi veri bütünlüğünü sağlamak 
 ## 1.0.0
 
 - İlk sürüm.
+
+
+## 5.0.3 updates
+- Removed in-app supporters toggle; About is code-controlled now
+- Privacy toggles now clear/stop history and disable screenshot on Android
+- Storage cache size controls now apply immediately to caching limits
+- Cleaned settings language labels and history tracking in search/player
 

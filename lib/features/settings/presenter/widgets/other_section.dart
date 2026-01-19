@@ -23,9 +23,10 @@ class OtherSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+    return settingsController.builder(builder: (context, data) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
         // Section Header
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
@@ -427,7 +428,7 @@ class OtherSection extends StatelessWidget {
                           ),
                         ),
                         Switch(
-                          value: settingsController.data.pauseListenHistory,
+                          value: data.pauseListenHistory,
                           onChanged: (value) {
                             settingsController.methods.setPauseListenHistory(value);
                           },
@@ -487,7 +488,7 @@ class OtherSection extends StatelessWidget {
                           ),
                         ),
                         Switch(
-                          value: settingsController.data.pauseSearchHistory,
+                          value: data.pauseSearchHistory,
                           onChanged: (value) {
                             settingsController.methods.setPauseSearchHistory(value);
                           },
@@ -547,7 +548,7 @@ class OtherSection extends StatelessWidget {
                           ),
                         ),
                         Switch(
-                          value: settingsController.data.disableScreenshot,
+                          value: data.disableScreenshot,
                           onChanged: (value) {
                             settingsController.methods.setDisableScreenshot(value);
                           },
@@ -606,7 +607,12 @@ class OtherSection extends StatelessWidget {
                 color: Colors.transparent,
                 child: InkWell(
                   onTap: () {
-                    // Implement image cache settings
+                    _showCacheSizeSheet(
+                      context,
+                      isImage: true,
+                      currentValue: data.maxImageCacheSize,
+                      onSelected: settingsController.methods.setMaxImageCacheSize,
+                    );
                   },
                   borderRadius: BorderRadius.circular(16),
                   child: Container(
@@ -653,7 +659,7 @@ class OtherSection extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                '${settingsController.data.maxImageCacheSize} MB',
+                                '${data.maxImageCacheSize} MB',
                                 style: context.themeData.textTheme.bodyMedium?.copyWith(
                                   color: context.themeData.colorScheme.onSurfaceVariant,
                                 ),
@@ -677,7 +683,12 @@ class OtherSection extends StatelessWidget {
                 color: Colors.transparent,
                 child: InkWell(
                   onTap: () {
-                    // Implement song cache settings
+                    _showCacheSizeSheet(
+                      context,
+                      isImage: false,
+                      currentValue: data.maxSongCacheSize,
+                      onSelected: settingsController.methods.setMaxSongCacheSize,
+                    );
                   },
                   borderRadius: BorderRadius.circular(16),
                   child: Container(
@@ -724,7 +735,7 @@ class OtherSection extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                '${settingsController.data.maxSongCacheSize} MB',
+                                '${data.maxSongCacheSize} MB',
                                 style: context.themeData.textTheme.bodyMedium?.copyWith(
                                   color: context.themeData.colorScheme.onSurfaceVariant,
                                 ),
@@ -747,7 +758,65 @@ class OtherSection extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8),
-      ],
-    );
+        ],
+      );
+    });
   }
+}
+
+void _showCacheSizeSheet(
+  BuildContext context, {
+  required bool isImage,
+  required int currentValue,
+  required ValueChanged<int> onSelected,
+}) {
+  final options = isImage ? [50, 100, 200, 300] : [500, 1000, 2000, 4000];
+  showModalBottomSheet(
+    context: context,
+    showDragHandle: true,
+    backgroundColor: context.themeData.colorScheme.surface,
+    builder: (context) {
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              isImage
+                  ? context.localization.imageCacheSize
+                  : context.localization.songCacheSize,
+              style: context.themeData.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const SizedBox(height: 12),
+            ...options.map(
+              (value) => RadioListTile<int>(
+                contentPadding: EdgeInsets.zero,
+                value: value,
+                // ignore: deprecated_member_use
+                groupValue: currentValue,
+                title: Text('$value MB'),
+                // ignore: deprecated_member_use
+                onChanged: (val) {
+                  if (val != null) {
+                    onSelected(val);
+                    Navigator.of(context).pop();
+                  }
+                },
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              context.localization.confirm,
+              style: context.themeData.textTheme.bodySmall?.copyWith(
+                color: context.themeData.colorScheme.onSurface.withValues(alpha: 0.6),
+              ),
+            ),
+          ],
+        ),
+      );
+    },
+  );
 }

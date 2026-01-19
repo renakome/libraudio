@@ -1,4 +1,26 @@
-## 5.0.2
+## 5.0.3 "dev"
+
+**성능 최적화**
+
+- Android, iOS 및 데스크톱 플랫폼을 위한 플랫폼별 최적화
+- LRU 메모리 캐시와 플랫폼 최적화된 디스크 캐시를 갖춘 스마트 캐시 관리자
+- 플랫폼별 스크롤 성능 구성을 갖춘 최적화된 ListView 위젯
+- APK 크기와 초기화 오버헤드를 줄이기 위한 조건부 라이브러리 로딩
+- 플랫폼 기능에 기반한 향상된 오디오 서비스 구성
+- 완전한 R8 모드와 ABI 우선순위를 갖춘 향상된 빌드 최적화
+
+**개선사항**
+
+- 앱 내 후원자 토글 제거됨; About은 이제 코드로 제어됨
+- 개인정보 보호 토글이 이제 기록을 지우고/중지하며 Android에서 스크린샷 차단 적용
+- 저장소 캐시 크기 컨트롤이 캐시 제한을 즉시 업데이트
+- 설정 언어 레이블 및 검색/플레이어에서 기록 추적 정리
+- 더 나은 메모리 관리를 위한 지연 로딩 구현
+- 플랫폼 최적화된 UI 구성 (Android의 Edge-to-Edge 등)
+- 자동 정리 및 크기 제한을 갖춘 향상된 캐시 전략
+- 다양한 플랫폼 간의 더 나은 리소스 관리
+
+## 5.0.2 "dev"
 
 **개선 사항**
 
@@ -277,4 +299,11 @@
 ## 1.0.0
 
 - 초기 버전.
+
+
+## 5.0.3 updates
+- Removed in-app supporters toggle; About is code-controlled now
+- Privacy toggles now clear/stop history and disable screenshot on Android
+- Storage cache size controls now apply immediately to caching limits
+- Cleaned settings language labels and history tracking in search/player
 

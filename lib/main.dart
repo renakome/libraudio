@@ -17,13 +17,18 @@ import 'package:musily/features/player/data/services/musily_service.dart';
 import 'package:musily/core/data/services/user_service.dart';
 import 'package:musily/core/presenter/widgets/app_material.dart';
 import 'package:musily/core/core_module.dart';
+import 'package:musily/core/utils/platform_optimizer.dart';
 
 final mediaStorePlugin = MediaStore();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+  // Initialize platform-specific optimizations first
+  await PlatformOptimizer.initialize();
+
+  // Desktop-specific services initialization (conditional loading)
+  if (PlatformOptimizer.isDesktop) {
     late IPCService ipcService;
     if (Platform.isWindows) {
       ipcService = IPCServiceWindows();
@@ -34,20 +39,17 @@ void main() async {
     if (!isFirstInstance) {
       exit(0);
     }
-  }
-
-  await Database().init();
-
-  if (Platform.isAndroid) {
-    await MediaStore.ensureInitialized();
-  }
-
-  await UpdaterService.checkForUpdates();
-
-  if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
     await WindowService.init();
     await TrayService.init();
   }
+
+  // Android-specific services initialization
+  if (PlatformOptimizer.isAndroid) {
+    await MediaStore.ensureInitialized();
+  }
+
+  await Database().init();
+  await UpdaterService.checkForUpdates();
 
   final userService = UserService();
   final libraryMigrationService = LibraryMigrationService();
@@ -57,16 +59,24 @@ void main() async {
   await musilyRepository.initialize();
   await userService.initialize();
 
+  final uiConfig = PlatformOptimizer.getOptimalUIConfig();
+
   await MusilyService.init(
     config: MusilyServiceConfig(
-      androidNotificationChannelId: 'app.musily.music',
-      androidNotificationChannelName: 'Musily',
-      androidNotificationIcon: 'drawable/ic_launcher_foreground',
-      androidShowNotificationBadge: true,
-      androidStopForegroundOnPause: false,
+      androidNotificationChannelId: PlatformOptimizer.isAndroid ? 'app.musily.music' : null,
+      androidNotificationChannelName: 'Libraudio',
+      androidNotificationIcon: PlatformOptimizer.isAndroid ? 'drawable/ic_launcher_foreground' : 'mipmap/ic_launcher',
+      androidShowNotificationBadge: PlatformOptimizer.isAndroid,
+      androidStopForegroundOnPause: PlatformOptimizer.isAndroid ? false : true,
+      // Optimize artwork downscaling based on platform
+      artDownscaleWidth: PlatformOptimizer.isMobile ? 300 : 500,
+      artDownscaleHeight: PlatformOptimizer.isMobile ? 300 : 500,
+      preloadArtwork: PlatformOptimizer.isMobile, // Only preload on mobile for better performance
     ),
   );
-  if (Platform.isAndroid) {
+
+  // Apply UI optimizations based on platform
+  if (uiConfig.enableEdgeToEdge && PlatformOptimizer.isAndroid) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
@@ -75,6 +85,7 @@ void main() async {
       ),
     );
   }
+
   runApp(
     ModularApp(
       module: CoreModule(),

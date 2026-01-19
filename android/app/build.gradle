@@ -35,13 +35,20 @@ android {
     ndkVersion = '27.0.12077973'
     flavorDimensions 'default'
 
+    // Platform-optimized compile options
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+        // Enable incremental compilation for faster builds
+        incremental = true
     }
 
     kotlinOptions {
         jvmTarget = "17"
+        // Enable Kotlin incremental compilation
+        incremental = true
+        // Enable experimental features for better performance
+        freeCompilerArgs += ["-Xjvm-default=all"]
     }
 
     defaultConfig {
@@ -50,6 +57,11 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
+
+        // Optimize for modern Android devices (arm64-v8a first for better performance)
+        ndk {
+            abiFilters 'arm64-v8a', 'armeabi-v7a', 'x86_64'
+        }
     }
 
     buildFeatures {
@@ -74,11 +86,30 @@ android {
 
     buildTypes {
         release {
-             // Habilita remoção de recursos não usados para reduzir tamanho do APK
+            // Aggressive optimizations for Android release builds
             shrinkResources = true
+            minifyEnabled = true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard.cfg'
+
+            // Platform-specific optimizations
+            buildConfigField "boolean", "ENABLE_PLATFORM_OPTIMIZATIONS", "true"
+            buildConfigField "boolean", "ENABLE_AUDIO_OPTIMIZATIONS", "true"
+            buildConfigField "boolean", "ENABLE_CACHE_OPTIMIZATIONS", "true"
+
+            // Enable R8 full mode for better optimization
+            android.buildTypes.release.ndk.debuggable = false
+
             signingConfig signingConfigs.stable
         }
-        debug {}
+        debug {
+            // Debug optimizations
+            buildConfigField "boolean", "ENABLE_PLATFORM_OPTIMIZATIONS", "false"
+            buildConfigField "boolean", "ENABLE_AUDIO_OPTIMIZATIONS", "false"
+            buildConfigField "boolean", "ENABLE_CACHE_OPTIMIZATIONS", "false"
+
+            // Enable debug features
+            debuggable = true
+        }
     }
 
     productFlavors {

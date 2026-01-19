@@ -1,4 +1,26 @@
-## 5.0.2
+## 5.0.3 "dev"
+
+**性能优化**
+
+- Android、iOS 和桌面平台的平台特定优化
+- 智能缓存管理器，具有 LRU 内存缓存和平台优化的磁盘缓存
+- 优化的 ListView 组件，具有平台特定的滚动性能配置
+- 条件库加载以减少 APK 大小和初始化开销
+- 基于平台能力的增强音频服务配置
+- 增强的构建优化，具有完整的 R8 模式和 ABI 优先级
+
+**改进**
+
+- 移除应用内支持者切换；关于现在由代码控制
+- 隐私切换现在清除/停止历史记录并在 Android 上强制截屏阻止
+- 存储缓存大小控件立即更新缓存限制
+- 清理设置语言标签和搜索/播放器中的历史跟踪
+- 延迟加载实现以获得更好的内存管理
+- 平台优化的 UI 配置（Android 上的 Edge-to-Edge 等）
+- 增强的缓存策略，具有自动清理和大小限制
+- 跨不同平台的更好资源管理
+
+## 5.0.2 "dev"
 
 **改进**
 
@@ -277,4 +299,11 @@
 ## 1.0.0
 
 - 初始版本。
+
+
+## 5.0.3 updates
+- Removed in-app supporters toggle; About is code-controlled now
+- Privacy toggles now clear/stop history and disable screenshot on Android
+- Storage cache size controls now apply immediately to caching limits
+- Cleaned settings language labels and history tracking in search/player
 

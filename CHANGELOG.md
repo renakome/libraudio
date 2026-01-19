@@ -1,4 +1,26 @@
-## 5.0.2
+## 5.0.3 "dev"
+
+**Performance Optimizations**
+
+- Platform-specific optimizations for Android, iOS, and desktop platforms
+- Smart cache manager with LRU memory cache and platform-aware disk caching
+- Optimized ListView widgets with platform-specific configurations for better scrolling performance
+- Conditional library loading to reduce APK size and initialization overhead
+- Enhanced audio service configuration based on platform capabilities
+- Improved build optimizations with R8 full mode and ABI prioritization
+
+**Improvements**
+
+- Supporters toggle removed; About is code-controlled
+- Privacy toggles now clear/stop history and enforce screenshot blocking on Android
+- Storage cache size controls immediately update cache limits
+- Cleaned settings language labels and history tracking in search/player
+- Lazy loading implementation for better memory management
+- Platform-optimized UI configurations (Edge-to-Edge on Android, etc.)
+- Enhanced caching strategies with automatic cleanup and size limits
+- Better resource management across different platforms
+
+## 5.0.2 "dev"
 
 **Improvements**
 

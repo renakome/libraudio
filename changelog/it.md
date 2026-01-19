@@ -1,4 +1,26 @@
-## 5.0.2
+## 5.0.3 "dev"
+
+**Ottimizzazioni delle Prestazioni**
+
+- Ottimizzazioni specifiche per piattaforma per Android, iOS e desktop
+- Gestore cache intelligente con cache memoria LRU e cache disco ottimizzato per piattaforma
+- Widget ListView ottimizzati con configurazioni specifiche per piattaforma per migliori prestazioni di scorrimento
+- Caricamento condizionale delle librerie per ridurre le dimensioni dell'APK e l'overhead di inizializzazione
+- Configurazione migliorata del servizio audio basata sulle capacità della piattaforma
+- Ottimizzazioni di compilazione migliorate con modalità R8 completa e prioritizzazione ABI
+
+**Miglioramenti**
+
+- Toggle sostenitori rimosso; Informazioni è controllato dal codice
+- I toggle della privacy ora puliscono/interrompono la cronologia e applicano il blocco screenshot su Android
+- I controlli delle dimensioni della cache di archiviazione aggiornano immediatamente i limiti della cache
+- Pulizia delle etichette lingua impostazioni e tracciamento cronologia in ricerca/player
+- Implementazione del caricamento lazy per una migliore gestione della memoria
+- Configurazioni UI ottimizzate per piattaforma (Edge-to-Edge su Android, ecc.)
+- Strategie di cache migliorate con pulizia automatica e limiti di dimensione
+- Migliore gestione delle risorse tra diverse piattaforme
+
+## 5.0.2 "dev"
 
 **Miglioramenti**
 
@@ -277,4 +299,11 @@ Nota: La libreria locale e la libreria Musily sono gestite separatamente per gar
 ## 1.0.0
 
 - Versione iniziale.
+
+
+## 5.0.3 updates
+- Removed in-app supporters toggle; About is code-controlled now
+- Privacy toggles now clear/stop history and disable screenshot on Android
+- Storage cache size controls now apply immediately to caching limits
+- Cleaned settings language labels and history tracking in search/player
 

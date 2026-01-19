@@ -1,4 +1,26 @@
-## 5.0.2
+## 5.0.3 "dev"
+
+**Optymalizacje Wydajności**
+
+- Optymalizacje specyficzne dla platformy dla Androida, iOS i komputerów stacjonarnych
+- Inteligentny menedżer pamięci podręcznej z pamięcią podręczną LRU i zoptymalizowaną pamięcią podręczną dyskową
+- Zoptymalizowane widżety ListView z konfiguracjami specyficznymi dla platformy dla lepszej wydajności przewijania
+- Warunkowe ładowanie bibliotek w celu zmniejszenia rozmiaru APK i obciążenia inicjalizacji
+- Ulepszona konfiguracja usługi audio oparta na możliwościach platformy
+- Ulepszone optymalizacje kompilacji z pełnym trybem R8 i priorytetem ABI
+
+**Ulepszenia**
+
+- Przełącznik wspierających usunięty; Informacje są teraz kontrolowane przez kod
+- Przełączniki prywatności teraz czyści/zatrzymują historię i wymuszają blokowanie zrzutów ekranu na Androidzie
+- Kontrole rozmiaru pamięci podręcznej natychmiast aktualizują limity pamięci podręcznej
+- Wyczyszczono etykiety języka ustawień i śledzenie historii w wyszukiwaniu/odbiorniku
+- Implementacja leniwego ładowania dla lepszego zarządzania pamięcią
+- Zoptymalizowane konfiguracje UI dla platformy (Edge-to-Edge na Androidzie itp.)
+- Ulepszone strategie pamięci podręcznej z automatycznym czyszczeniem i limitami rozmiaru
+- Lepsze zarządzanie zasobami między różnymi platformami
+
+## 5.0.2 "dev"
 
 **Ulepszenia**
 
@@ -277,4 +299,11 @@ Uwaga: Biblioteka lokalna i biblioteka Musily są zarządzane oddzielnie, aby za
 ## 1.0.0
 
 - Wersja początkowa.
+
+
+## 5.0.3 updates
+- Removed in-app supporters toggle; About is code-controlled now
+- Privacy toggles now clear/stop history and disable screenshot on Android
+- Storage cache size controls now apply immediately to caching limits
+- Cleaned settings language labels and history tracking in search/player
 

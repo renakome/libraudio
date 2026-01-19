@@ -16,6 +16,7 @@ import 'package:musily/features/player/domain/usecases/get_smart_queue_usecase.d
 import 'package:musily/features/player/presenter/controllers/player/player_data.dart';
 import 'package:musily/features/player/presenter/controllers/player/player_methods.dart';
 import 'package:musily/features/settings/presenter/controllers/settings/settings_controller.dart';
+import 'package:musily/features/settings/data/privacy_service.dart';
 import 'package:musily/features/track/domain/entities/track_entity.dart';
 import 'package:musily/features/track/domain/usecases/get_timed_lyrics_usecase.dart';
 import 'package:musily/features/track/domain/usecases/get_track_lyrics_usecase.dart';
@@ -378,6 +379,9 @@ class PlayerController extends BaseController<PlayerData, PlayerMethods> {
         updateData(data.copyWith(seeking: false));
       },
       loadAndPlay: (track, playingId) async {
+        if (!settingsController.data.pauseListenHistory && track.id.isNotEmpty) {
+          await PrivacyService.addListen(track.id, enabled: true);
+        }
         if (data.loadRequested) {
           if (track.id != data.currentPlayingItem?.id) {
             updateData(

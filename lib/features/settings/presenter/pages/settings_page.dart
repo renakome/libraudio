@@ -29,23 +29,25 @@ class SettingsPage extends StatelessWidget {
           title: Text(context.localization.settings),
         ),
         body: SafeArea(
-          child: ListView(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            children: [
-              if (settingsController.showSyncSection)
-                SyncSection(
-                  coreController: coreController,
-                  authController: authController,
+          child: settingsController.builder(builder: (context, _) {
+            return ListView(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              children: [
+                if (settingsController.showSyncSection)
+                  SyncSection(
+                    coreController: coreController,
+                    authController: authController,
+                  ),
+                AppSection(
+                  controller: settingsController,
                 ),
-              AppSection(
-                controller: settingsController,
-              ),
-              OtherSection(
-                coreController: coreController,
-                settingsController: settingsController,
-              ),
-            ],
-          ),
+                OtherSection(
+                  coreController: coreController,
+                  settingsController: settingsController,
+                ),
+              ],
+            );
+          }),
         ),
       ),
     );

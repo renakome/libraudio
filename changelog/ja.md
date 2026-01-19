@@ -1,4 +1,26 @@
-## 5.0.2
+## 5.0.3 "dev"
+
+**パフォーマンス最適化**
+
+- Android、iOS、デスクトッププラットフォーム向けのプラットフォーム固有の最適化
+- LRUメモリキャッシュとプラットフォーム最適化されたディスクキャッシュを備えたスマートキャッシュマネージャー
+- プラットフォーム固有のスクロールパフォーマンス設定を持つ最適化されたListViewウィジェット
+- APKサイズと初期化オーバーヘッドを削減するための条件付きライブラリ読み込み
+- プラットフォーム機能に基づく強化されたオーディオサービス設定
+- 完全なR8モードとABI優先順位付けによる強化されたビルド最適化
+
+**改善**
+
+- アプリ内サポータートグルを削除；Aboutはコードで制御されるようになりました
+- プライバシートグルが履歴をクリア/停止し、Androidでスクリーンショットブロックを適用するようになりました
+- ストレージキャッシュサイズコントロールがキャッシュ制限を即座に更新
+- 設定言語ラベルと検索/プレイヤーでの履歴トラッキングのクリーンアップ
+- より優れたメモリ管理のための遅延読み込みの実装
+- プラットフォーム最適化されたUI設定（AndroidのEdge-to-Edgeなど）
+- 自動クリーンアップとサイズ制限を備えた強化されたキャッシュ戦略
+- 異なるプラットフォーム間でのより優れたリソース管理
+
+## 5.0.2 "dev"
 
 **改善点**
 
@@ -277,4 +299,11 @@
 ## 1.0.0
 
 - 初期バージョン。
+
+
+## 5.0.3 updates
+- Removed in-app supporters toggle; About is code-controlled now
+- Privacy toggles now clear/stop history and disable screenshot on Android
+- Storage cache size controls now apply immediately to caching limits
+- Cleaned settings language labels and history tracking in search/player
 

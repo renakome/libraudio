@@ -1,4 +1,26 @@
-## 5.0.2
+## 5.0.3 "dev"
+
+**Optimasi Performa**
+
+- Optimasi khusus platform untuk Android, iOS, dan desktop
+- Manajer cache cerdas dengan cache memori LRU dan cache disk yang dioptimalkan untuk platform
+- Widget ListView yang dioptimalkan dengan konfigurasi khusus platform untuk performa scroll yang lebih baik
+- Pemuatan library bersyarat untuk mengurangi ukuran APK dan overhead inisialisasi
+- Konfigurasi layanan audio yang ditingkatkan berdasarkan kemampuan platform
+- Optimasi build yang ditingkatkan dengan mode R8 penuh dan prioritas ABI
+
+**Peningkatan**
+
+- Toggle pendukung dihapus; Tentang sekarang dikontrol oleh kode
+- Toggle privasi sekarang membersihkan/menghentikan riwayat dan menerapkan pemblokiran tangkapan layar di Android
+- Kontrol ukuran cache penyimpanan segera memperbarui batas cache
+- Pembersihan label bahasa pengaturan dan pelacakan riwayat di pencarian/pemutar
+- Implementasi lazy loading untuk manajemen memori yang lebih baik
+- Konfigurasi UI yang dioptimalkan untuk platform (Edge-to-Edge di Android, dll.)
+- Strategi cache yang ditingkatkan dengan pembersihan otomatis dan batas ukuran
+- Manajemen sumber daya yang lebih baik di berbagai platform
+
+## 5.0.2 "dev"
 
 **Peningkatan**
 
@@ -277,4 +299,11 @@ Catatan: Perpustakaan lokal dan perpustakaan Musily dikelola secara terpisah unt
 ## 1.0.0
 
 - Versi awal.
+
+
+## 5.0.3 updates
+- Removed in-app supporters toggle; About is code-controlled now
+- Privacy toggles now clear/stop history and disable screenshot on Android
+- Storage cache size controls now apply immediately to caching limits
+- Cleaned settings language labels and history tracking in search/player
 

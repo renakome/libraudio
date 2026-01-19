@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:musily/core/presenter/extensions/build_context.dart';
+import 'package:musily/core/presenter/ui/buttons/ly_tonal_button.dart';
 import 'package:musily/core/presenter/ui/utils/ly_page.dart';
 import 'package:musily/core/presenter/widgets/empty_state.dart';
 import 'package:musily/core/presenter/widgets/musily_app_bar.dart';
-import 'package:musily/core/presenter/ui/buttons/ly_tonal_button.dart';
 import 'package:musily/features/settings/domain/entities/supporter_entity.dart';
 import 'package:musily/features/settings/presenter/controllers/settings/settings_controller.dart';
 import 'package:musily/features/settings/presenter/widgets/supporter_tile.dart';
@@ -27,11 +27,16 @@ class _AboutPageState extends State<AboutPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      widget.controller.methods.loadSupporters();
+      if (widget.controller.data.showSupporters) {
+        widget.controller.methods.loadSupporters();
+      }
     });
   }
 
   Future<void> _refresh() {
+    if (!widget.controller.data.showSupporters) {
+      return Future.value();
+    }
     return widget.controller.methods.loadSupporters(forceRefresh: true);
   }
 
@@ -43,10 +48,13 @@ class _AboutPageState extends State<AboutPage> {
         final List<SupporterEntity> supporters = data.supporters;
         final bool isLoading = data.loadingSupporters && supporters.isEmpty;
         final bool showSupporters = data.showSupporters;
+        final String title = showSupporters
+            ? context.localization.aboutSupporters
+            : context.localization.about;
 
         return Scaffold(
           appBar: MusilyAppBar(
-            title: Text(context.localization.about),
+            title: Text(title),
           ),
           body: SafeArea(
             child: RefreshIndicator(
@@ -58,32 +66,26 @@ class _AboutPageState extends State<AboutPage> {
                   const _AboutHeader(),
                   const SizedBox(height: 24),
                   const _AboutActions(),
-                  const SizedBox(height: 24),
-                  _SupportersToggle(
-                    value: showSupporters,
-                    onChanged: (value) =>
-                        widget.controller.methods.setShowSupporters(value),
-                  ),
                   if (showSupporters) ...[
                     const SizedBox(height: 24),
-                  const _SupportersSectionTitle(),
-                  const SizedBox(height: 16),
-                  if (isLoading)
-                    const _SupportersLoading()
-                  else if (supporters.isEmpty)
-                    EmptyState(
-                      title: context.localization.supportersEmpty,
-                      icon: Icon(
-                        LucideIcons.heartHandshake,
-                        color: context.themeData.colorScheme.primary,
+                    const _SupportersSectionTitle(),
+                    const SizedBox(height: 16),
+                    if (isLoading)
+                      const _SupportersLoading()
+                    else if (supporters.isEmpty)
+                      EmptyState(
+                        title: context.localization.supportersEmpty,
+                        icon: Icon(
+                          LucideIcons.heartHandshake,
+                          color: context.themeData.colorScheme.primary,
+                        ),
+                      )
+                    else
+                      ...supporters.map(
+                        (supporter) => SupporterTile(
+                          supporter: supporter,
+                        ),
                       ),
-                    )
-                  else
-                    ...supporters.map(
-                      (supporter) => SupporterTile(
-                        supporter: supporter,
-                      ),
-                    ),
                   ],
                 ],
               ),
@@ -119,8 +121,7 @@ class _AboutHeader extends StatelessWidget {
         Text(
           'by Renako',
           style: context.themeData.textTheme.bodyLarge?.copyWith(
-            color:
-                context.themeData.colorScheme.onSurface.withValues(alpha: 0.7),
+            color: context.themeData.colorScheme.onSurface.withValues(alpha: 0.7),
           ),
           textAlign: TextAlign.center,
         ),
@@ -175,52 +176,6 @@ class _AboutActions extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class _SupportersToggle extends StatelessWidget {
-  final bool value;
-  final ValueChanged<bool> onChanged;
-  const _SupportersToggle({
-    required this.value,
-    required this.onChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: context.themeData.colorScheme.surfaceContainerHighest
-            .withValues(alpha: 0.4),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: context.themeData.colorScheme.outline.withValues(alpha: 0.15),
-        ),
-      ),
-      child: Row(
-        children: [
-          Icon(
-            LucideIcons.users,
-            size: 18,
-            color: context.themeData.colorScheme.primary,
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Text(
-              'Mostrar apoiadores',
-              style: context.themeData.textTheme.bodyLarge?.copyWith(
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-          Switch(
-            value: value,
-            onChanged: onChanged,
-          ),
-        ],
-      ),
     );
   }
 }

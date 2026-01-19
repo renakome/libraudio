@@ -7,6 +7,8 @@ import 'package:musily/core/data/services/tray_service.dart';
 import 'package:musily/core/data/services/window_service.dart';
 import 'package:musily/core/domain/adapters/http_adapter.dart';
 import 'package:musily/core/domain/presenter/app_controller.dart';
+import 'package:musily/core/utils/smart_cache_manager.dart';
+import 'package:musily/features/settings/data/privacy_service.dart';
 import 'package:musily/features/settings/domain/enums/accent_color_preference.dart';
 import 'package:musily/features/settings/domain/enums/close_preference.dart';
 import 'package:musily/features/settings/domain/entities/supporter_entity.dart';
@@ -15,10 +17,12 @@ import 'package:musily/features/settings/presenter/controllers/settings/settings
 import 'package:path/path.dart' as path;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:musily/core/presenter/extensions/build_context.dart';
+import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 
 class SettingsController extends BaseController<SettingsData, SettingsMethods> {
+  static const bool _supportersEnabled = false;
   static const _remoteSupportersUrl =
-      'https://raw.githubusercontent.com/renakome/Libraudio/refs/heads/main/assets/supporters.json';
+      'https://raw.githubusercontent.com/renakome/libraudio/refs/heads/main/assets/supporters.json';
   static const _localSupportersAssetPath = 'assets/supporters.json';
 
   late final HttpAdapter _httpAdapter;
@@ -32,7 +36,9 @@ class SettingsController extends BaseController<SettingsData, SettingsMethods> {
     methods.loadClosePreference();
     methods.loadAccentColorPreference();
     methods.loadShowSupporters();
-    methods.loadSupporters();
+    if (_supportersEnabled) {
+      methods.loadSupporters();
+    }
     // Load advanced settings
     methods.loadAdvancedPlayerSettings();
     methods.loadAdvancedAppearanceSettings();
@@ -167,9 +173,8 @@ class SettingsController extends BaseController<SettingsData, SettingsMethods> {
         updateData(data.copyWith(accentColorPreference: preference));
       },
       setShowSupporters: (value) async {
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setBool('settings.showSupporters', value);
-        if (!value) {
+        final enabled = _supportersEnabled && value;
+        if (!enabled) {
           updateData(
             data.copyWith(
               showSupporters: false,
@@ -179,19 +184,15 @@ class SettingsController extends BaseController<SettingsData, SettingsMethods> {
           );
           return;
         }
-        updateData(
-          data.copyWith(showSupporters: true),
-        );
+        updateData(data.copyWith(showSupporters: true));
         if (data.supporters.isEmpty) {
           await methods.loadSupporters(forceRefresh: true);
         }
       },
       loadShowSupporters: () async {
-        final prefs = await SharedPreferences.getInstance();
-        final saved = prefs.getBool('settings.showSupporters');
         updateData(
           data.copyWith(
-            showSupporters: saved ?? true,
+            showSupporters: _supportersEnabled,
           ),
         );
       },
@@ -283,6 +284,10 @@ class SettingsController extends BaseController<SettingsData, SettingsMethods> {
           pauseSearchHistory: pauseSearchHistory,
           disableScreenshot: disableScreenshot,
         ));
+
+        if (disableScreenshot && Platform.isAndroid) {
+          await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+        }
       },
       loadStorageSettings: () async {
         final prefs = await SharedPreferences.getInstance();
@@ -293,6 +298,12 @@ class SettingsController extends BaseController<SettingsData, SettingsMethods> {
           maxImageCacheSize: maxImageCacheSize,
           maxSongCacheSize: maxSongCacheSize,
         ));
+
+        final cacheManager = await SmartCacheManager.getInstance();
+        await cacheManager.updateLimits(
+          maxMemoryBytes: maxImageCacheSize * 1024 * 1024,
+          maxDiskBytes: maxSongCacheSize * 1024 * 1024,
+        );
       },
       loadAccentColorPreference: () async {
         final prefs = await SharedPreferences.getInstance();
@@ -556,27 +567,44 @@ class SettingsController extends BaseController<SettingsData, SettingsMethods> {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setBool('pauseListenHistory', value);
         updateData(data.copyWith(pauseListenHistory: value));
+        if (value) {
+          await PrivacyService.clearListenHistory();
+        }
       },
       setPauseSearchHistory: (value) async {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setBool('pauseSearchHistory', value);
         updateData(data.copyWith(pauseSearchHistory: value));
+        if (value) {
+          await PrivacyService.clearSearchHistory();
+        }
       },
       setDisableScreenshot: (value) async {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setBool('disableScreenshot', value);
         updateData(data.copyWith(disableScreenshot: value));
+        if (Platform.isAndroid) {
+          if (value) {
+            await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+          } else {
+            await FlutterWindowManager.clearFlags(FlutterWindowManager.FLAG_SECURE);
+          }
+        }
       },
       // Storage Settings Methods
       setMaxImageCacheSize: (size) async {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setInt('maxImageCacheSize', size);
         updateData(data.copyWith(maxImageCacheSize: size));
+        final cacheManager = await SmartCacheManager.getInstance();
+        await cacheManager.updateLimits(maxMemoryBytes: size * 1024 * 1024);
       },
       setMaxSongCacheSize: (size) async {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setInt('maxSongCacheSize', size);
         updateData(data.copyWith(maxSongCacheSize: size));
+        final cacheManager = await SmartCacheManager.getInstance();
+        await cacheManager.updateLimits(maxDiskBytes: size * 1024 * 1024);
       },
     );
   }
